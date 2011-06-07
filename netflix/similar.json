@@ -1,0 +1,10 @@
+{	"name"	: "Netflix Similar Titles Schema",
+	"id"		: "similar",
+	"extends: { "$ref":"./nfData.json"}
+
+   "properties": {
+      "title"	: { "$ref":"titles", "type":"object"},
+		"target"	: { "$ref":"titles", "type":"object"},
+      "score"	: { "type":"number", "description":"degree of similarlity" }
+	}
+}

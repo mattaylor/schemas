@@ -1,0 +1,9 @@
+{	"name"	: "Netflix Rental History",
+	"id"		: "history",
+	"extends: { "$ref":"./nfUser.json"}
+
+   "properties": {
+		"shipped": { "type":"string", "format":"date"},
+		"returned":{ "type":"string", "format":"date", "optional":true}
+	}
+}

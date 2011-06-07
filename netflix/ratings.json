@@ -1,0 +1,17 @@
+{	"name"	: "Netflix Ratings",
+	"id"		: "ratings",
+	"extends: { "$ref":"./nfUser.json"}
+
+   "properties": {
+		"rating"	: { "type":"number", "readonly":false },
+		"actual"	: { "type":"boolean"}
+	},
+
+	"links": [
+		{	"rel":"create", "href":"/ratings/{user.id}", "properties": {
+				"titleId": { "type":"string" },
+				"rating"	: { "type":"number", "enum":[0,1,2,3,4,5] }
+			}
+		}
+	]
+}

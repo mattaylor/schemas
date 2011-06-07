@@ -1,0 +1,42 @@
+{
+    "name": "Ribbit Message Dispatcher Service",
+    "description" : "Message Dispatchers could be : emailsms, bt-sms, ribbit-email, im",
+    "additionalProperties": false,
+    "type" : [
+        "object",
+        "array" 
+    ],
+    "items" : {
+        "$ref": "#" 
+    },
+    "readonly" : true,
+    "properties" : {
+        "id" : {
+            "type" : "string",
+            "description": "[GET] Unique Message Dispatcher Service",
+            "maxLength": "80",
+            "readonly": true 
+        },
+        "type" : {
+            "type": "array",
+            "description": "[GET] Message types supported by the dispatcher service",
+            "readonly": true,
+            "items" : {
+                "enum": [
+                    "sms",
+                    "email",
+                    "im",
+                    "video",
+                    "audio" 
+                ] 
+            } 
+        } 
+    },
+    "links" : [
+        {
+            "rel" : "instances",
+            "description": "All Available Message Dispatcher Services",
+            "href" : "/services/ribbit/dispatcher" 
+        } 
+    ]
+}

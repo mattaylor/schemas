@@ -1,0 +1,143 @@
+{
+    "name": "Global configuration for voicemail service.",
+    "description": "",
+    "additionalProperties": false,
+    "type": [
+        "object",
+        "array" 
+    ],
+    "items": {
+        "$ref": "#" 
+    },
+    "properties": {
+        "id": {
+            "description": "Voicemail TUI access number, e.g. tel:+3035551111.",
+            "type": "string",
+            "format": "uri",
+            "pattern": "^tel:\\+\\d+" 
+        },
+        "dialPlan": {
+            "description": "Dial plan associated to accessNumber, e.g. us_domeatic.",
+            "type": "string" 
+        },
+        "greetingSuffixFile": {
+            "description": "URI to the (custom) default greeting file, e.g. /media/{domain}/{folder}/greeting.mp3",
+            "type": "string",
+            "format": "uri" 
+        },
+        "voiceFont": {
+            "description": "Default voice files for voicemail service.",
+            "default": "us_en_female",
+            "enum": [
+                "us_en_female",
+                "uk_en_female" 
+            ] 
+        } 
+    },
+    "links": [
+        {
+            "rel": "modify",
+            "description": "Modify voicemail config parameters",
+            "href": "/services/ribbit/vmail/config",
+            "method": "put",
+            "targetSchema": {
+                "properties": {
+                    "greetingSuffixFile": {
+                        "$ref": "#.greetingSuffixFile" 
+                    },
+                    "voiceFont": {
+                        "$ref": "#.voiceFont" 
+                    } 
+                } 
+            } 
+        },
+        {
+            "rel": "configuration",
+            "description": "Retreive voicemail config parameters",
+            "href": "/services/ribbit/vmail/config",
+            "properties": {
+                "greetingSuffixFile": {
+                    "$ref": "#.greetingSuffixFile" 
+                },
+                "voiceFont": {
+                    "$ref": "#.voiceFont" 
+                } 
+            } 
+        },
+        {
+            "rel": "createMessageNumber",
+            "description": "Create a visual voicemail message number",
+            "href": "/services/ribbit/vmail/messageNumbers",
+            "method": "post",
+            "id": {
+                "$ref": "#.id" 
+            } 
+        },
+        {
+            "rel": "deleteMessageNumber",
+            "description": "Remove a visual voicemail message number",
+            "href": "/services/ribbit/vmail/messageNumbers",
+            "method": "delete",
+            "id": {
+                "$ref": "#.id" 
+            } 
+        },
+        {
+            "rel": "messageNumbers",
+            "description": "Retreive a visual voicemail message number",
+            "href": "/services/ribbit/vmail/messageNumbers/{uid}",
+            "id": {
+                "$ref": "#.id" 
+            } 
+        },
+        {
+            "rel": "createAccessNumber",
+            "description": "Create voicemail access number",
+            "href": "/services/ribbit/vmail/accessNumbers",
+            "method": "post",
+            "properties": {
+                "id": {
+                    "$ref": "#.id" 
+                },
+                "dialPlan": {
+                    "$ref": "#.dialPlan" 
+                } 
+            } 
+        },
+        {
+            "rel": "modifyAccessNumber",
+            "description": "Modify dialPlan associated to voicemail access number",
+            "href": "/services/ribbit/vmail/accessNumbers/{id}",
+            "method": "put",
+            "properties": {
+                "dialPlan": {
+                    "$ref": "#.dialPlan" 
+                } 
+            } 
+        },
+        {
+            "rel": "deleteAccessNumber",
+            "description": "Delete voicemail access number",
+            "href": "/services/ribbit/vmail/accessNumbers/{id}",
+            "method": "delete",
+            "properties": {
+                "id": {
+                    "$ref": "#.id" 
+                } 
+            } 
+        },
+        {
+            "rel": "accessNumbers",
+            "description": "Retreive voicemail access numbers",
+            "href": "/services/ribbit/vmail/accessNumbers",
+            "properties": {
+                "id": {
+                    "$ref": "#.id" 
+                },
+                "dialPlan": {
+                    "$ref": "#.dialPlan" 
+                } 
+            } 
+        } 
+    ]
+}

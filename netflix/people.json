@@ -1,0 +1,14 @@
+{	"name"	: "Netflix People Schema",
+	"id"		: "people",
+	"extends: { "$ref":"./nfData.json"}
+
+   "properties": {
+      "name"	: { "type":"string", "description":"The name of this person" }
+	},
+
+	"links": [
+		{	"rel":"awards",  "href":"awards?person={id}", "targetSchema":"awards" },
+		{	"rel":"actedIn", "href":"credits?person.id={id}&role=actor",	"targetSchema":"credits" },
+		{	"rel":"directed","href":"credits?person.id={id}&role=director", "targetSchema":"credits"}
+   ]
+}

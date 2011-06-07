@@ -1,0 +1,67 @@
+{
+    "name": "Normalizer",
+    "description": "Normalize numbers given a dialplan",
+    "additonalProperties": false,
+    "type": [
+        "array",
+        "object" 
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "readonly": true,
+    "properties": {
+        "normalized": {
+            "description": "[GET] Fully normalized number",
+            "type": "string",
+            "readonly": true,
+            "optional": true 
+        },
+        "orginal": {
+            "description": "[GET] The original number to be normalized.",
+            "type": "string",
+            "format": "phone",
+            "pattern": "(tel:)?(\\+)?(\\d+)",
+            "readonly": true 
+        },
+        "formatted": {
+            "description": "[GET] The formatted number.",
+            "type": "string",
+            "readonly": true,
+            "optional": true 
+        },
+        "dialplan": {
+            "description": "The dialing plan used for number normalization.",
+            "type": "string",
+            "readonly": true 
+        },
+        "status" : {
+            "description": "[GET] Indicates whether or not normalization succeeded for the given original number.",
+            "type": "string",
+            "enum": [
+                "success",
+                "error" 
+            ],
+            "readonly": "true" 
+        } 
+    },
+    "links" : [
+        {
+            "rel" : "instances",
+            "href": "/services/ribbit/normalizer",
+            "description": "Dial plan and original numbers must be provided.",
+            "properties": {
+                "dialplan": {
+                    "$ref": "#.properties.dialplan" 
+                },
+                "original": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#.properties.original" 
+                    } 
+                } 
+            } 
+        } 
+    ]
+}

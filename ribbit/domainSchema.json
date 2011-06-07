@@ -1,0 +1,59 @@
+{
+    "name": "Domain Schema",
+    "description": "This is the REST API schema for the domains resource, which is a container for users and apps and defines a relationship between them",
+    "additionalProperites": false,
+    "type" : [
+        "object",
+        "array" 
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "properties": {
+        "name": {
+            "type": "string",
+            "readonly": false,
+            "pattern": "[A-Za-z0-9_-]+",
+            "minLength": "1",
+            "maxLength": "128",
+            "description": "[GET/POST] Unique domain identifier" 
+        },
+        "owner": {
+            "type": "string",
+            "$ref": "./userSchema.json",
+            "readonly": true,
+            "maxLength": "80",
+            "description": "[GET] The GUID of the user that owns this domain" 
+        } 
+    },
+    "links": [
+        {
+            "rel": "full",
+            "href": "/domains/{id}",
+            "description": "Get one specific domain" 
+        },
+        {
+            "rel": "instances",
+            "href": "/domains",
+            "description": "List all domains" 
+        },
+        {
+            "rel": "create",
+            "href": "/domains",
+            "method": "post",
+            "description": "Create new domain. A maximum of 10 domains can be created by any one user",
+            "properties" : {
+                "name": {
+                    "$ref": "#.properties.name" 
+                } 
+            } 
+        },
+        {
+            "rel" : "delete",
+            "href" : "/domains/{id}",
+            "method" : "delete",
+            "description" : "Delete domain" 
+        } 
+    ]
+}

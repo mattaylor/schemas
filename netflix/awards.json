@@ -1,0 +1,13 @@
+{	"name": "Netflix Awards Schema",
+	"id"	: "awards",
+	"extends: { "$ref":"./nfData.json"}
+
+   "properties": {
+		"title"	: { "$ref":"titles", "type":"object"},
+		"person"	: { "$ref":"people", "type":"object"},
+      "type"	: { "type":"string", "enum":["baftas", "grammies", "golden globe", "oscars", "cannes", "sundance"] },
+		"category":{ "type":"string" },
+		"year"	: { "type":"string", "format":"regexp", "pattern":"\d{4}" },
+		"won"		: { "type":"boolean"}
+	}
+}

@@ -1,0 +1,11 @@
+{	"name"	: "Netflix User / Title States",
+	"id"		: "states",
+	"extends: { "$ref":"./nfUser.json"}
+
+   "properties": {
+		"queued"	: { "type":"boolean"},
+		"prefers": { "type":"string", "enum":["add", "addAll", "save", "saveAll"]},
+		"actions": { "type":"string", "items":{ "$ref":"#.properties.prefers" } },
+		"actual"	: { "type":"boolean"}
+	}
+}

@@ -1,0 +1,9 @@
+{	"name"	: "Netflix Lanaguages Schema",
+	"id"		: "languages",
+	"extends: { "$ref":"./nfData.json"}
+
+   "properties": {
+      "title"	: { "$ref":"titles", "type":"object" },
+      "language":{ "type":"string"}
+	}
+}

@@ -1,0 +1,320 @@
+{
+    "name": "Message Schema",
+    "description": "",
+    "type": [
+        "array",
+        "object" 
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "additionalProperties": false,
+    "properties" : {
+        "id" : {
+            "type": "number",
+            "description": "[GET] Unique Message Identifier.",
+            "readonly": true 
+        },
+        "sourceURI" : {
+            "type": "string",
+            "description": "[GET/PUT/POST] [Absolute URI] Source device URI (eg: tel:+551991667928, eg: mailto:rafa.ferreira@gmail.com) - Each dispatcher will have the option to validate or not this property. The property is editable only if the message is in draft or error status",
+            "format": "uri",
+            "maxLength": "255" 
+        },
+        "targetURI" : {
+            "type": "string",
+            "description": "[GET/PUT/POST] [Absolute URI] Destination device URI (eg: tel:+551991667928, eg: mailto:rafa.ferreira@gmail.com) - Each dispatcher will have the option to validate or not this property. The property is editable only if the message is in draft or error status",
+            "format": "uri",
+            "maxLength": "255" 
+        },
+        "sourceName" : {
+            "type": "string",
+            "description": "[GET/PUT/POST] Source name - Free text field to nickname/name/etc. The property is editable only if the message is in draft or error status",
+            "optional": true,
+            "maxLength": "255" 
+        },
+        "targetName": {
+            "type": "string",
+            "description": "[GET/PUT/POST] Target/destination name - Free text field to nickname/name/etc. The property is editable only if the message is in draft or error status",
+            "optional": true,
+            "maxLength": "255" 
+        },
+        "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "[GET] The Date this message was created. Example 2001-01-01T00:02:00Z",
+            "readonly": true 
+        },
+        "statusDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "[GET] The Date the status was last updated. Example 2001-01-01T00:02:00Z. Will be empty until some edit occurs in the Message",
+            "readonly": true 
+        },
+        "status" : {
+            "type": "string",
+            "description": "[GET/PUT/POST] Message status. Changes allowed [(new to read), (read to new), (draft/error to queued), (new/read/draft/dispatched/error to deleted)]. Draft will be default",
+            "default" : "draft",
+            "enum": [
+                "dispatched",
+                "queued",
+                "error",
+                "new",
+                "read",
+                "draft",
+                "deleted" 
+            ],
+            "optional": true 
+        },
+        "subject" : {
+            "type": "string",
+            "description": "[GET/PUT/POST] The subject of this message. The property is editable only if the message is in draft or error status. If the message body is empty, this property must have a non-empty content.",
+            "optional": true,
+            "maxLength": "160" 
+        },
+        "type": {
+            "type": "string",
+            "description": "[GET/PUT/POST] Message type (if set, need to validate if dispatchService accept the type). The property is editable only if the message is in draft or error status",
+            "enum": [
+                "sms",
+                "mms",
+                "im",
+                "voice",
+                "email",
+                "video" 
+            ] 
+        },
+        "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maxiumum": 100,
+            "description": "[GET/PUT/POST] A number of sorting by priority. The property is editable only if the message is in draft or error status",
+            "optional": true 
+        },
+        "body": {
+            "type": "string",
+            "description": "[GET/PUT/POST] Message body, today limited to 8000 characters. The property is editable only if the message is in draft or error status. If the message subject is empty, this property must have a non-empty content.",
+            "optional": true,
+            "maxLength": "8000" 
+        },
+        "mediaURI": {
+            "type": "string",
+            "description": "[GET/PUT/POST] [Relative URI] Message attachment, could be just a folder (shall add all files from the folder). The property is editable only if the message is in draft or error status",
+            "format": "uri",
+            "optional": true,
+            "maxLength": "472" 
+        },
+        "callId" : {
+            "type": "number",
+            "description": "[GET/PUT/POST] CallId associated with this message. The property is editable only if the message is in draft or error status",
+            "optional": true 
+        },
+        "dispatchService": {
+            "type": "string",
+            "description": "[GET/PUT/POST] The Message Delivery Service to use for this message. This property is 'required' if the status is being set to 'queued'. The property is editable only if the message is in draft or error status",
+            "format": "uri",
+            "optional": true,
+            "maxLength": "128" 
+        },
+        "labels": {
+            "type": "array",
+            "description": "[GET/PUT/POST] Miscellaneous data about this Message",
+            "items": {
+                "type": "string",
+                "maxLength": "80" 
+            },
+            "optional": true 
+        },
+        "error": {
+            "type": "string",
+            "description": "[GET/PUT/POST] An indication of why the message has failed",
+            "optional": true,
+            "maxLength": "255" 
+        },
+        "duration": {
+            "type": "number",
+            "description": "[GET] The length of a voicemail message, in seconds. Only applicable for 'voice' message types",
+            "optional": true,
+            "readonly": true
+        } 
+    },
+    "links": [
+        {
+            "rel": "full",
+            "href": "/messages/{uid}/{id}",
+            "description": "Get one specific message" 
+        },
+        {
+            "rel": "instances",
+            "href": "/messages/{uid}",
+            "description": "Get all the messages of the user and optionally use the supported filters below",
+            "properties": {
+                "status": {
+                    "$ref": "#.status" 
+                },
+                "type": {
+                    "$ref": "#.type" 
+                },
+                "labels": {
+                    "$ref": "#.labels" 
+                },
+                "priority": {
+                    "$ref": "#.priority" 
+                },
+                "callId": {
+                    "$ref": "#.callId" 
+                } 
+            } 
+        },
+        {
+            "rel": "create",
+            "href": "/messages/{uid}",
+            "method": "POST",
+            "description": "Create new message",
+            "properties": {
+                "sourceURI": {
+                    "$ref": "#.properities.sourceURI" 
+                },
+                "targetURI" : {
+                    "$ref": "#.properities.targetURI" 
+                },
+                "sourceName": {
+                    "$ref": "#.properities.sourceName" 
+                },
+                "targetName": {
+                    "$ref": "#.properities.targetName" 
+                },
+                "status": {
+                    "$ref": "#.properities.status" 
+                },
+                "subject" : {
+                    "$ref": "#.properities.subject" 
+                },
+                "type" : {
+                    "$ref": "#.properities.type" 
+                },
+                "priority" : {
+                    "$ref": "#.properities.priority" 
+                },
+                "body" : {
+                    "$ref": "#.properities.body" 
+                },
+                "mediaURI" : {
+                    "$ref": "#.properities.mediaURI" 
+                },
+                "callId" : {
+                    "$ref": "#.properities.callId" 
+                },
+                "dispatchService" : {
+                    "$ref": "#.properities.dispatchService" 
+                },
+                "labels" : {
+                    "$ref": "#.properities.labels" 
+                },
+                "error" : {
+                    "$ref": "#.properities.error" 
+                } 
+            } 
+        },
+        {
+            "rel" : "modify",
+            "href" : "/messages/{uid}/{id}",
+            "method" : "PUT",
+            "description" : "Update message properties",
+            "properties": {
+                "sourceURI": {
+                    "$ref": "#.properities.sourceURI" 
+                },
+                "targetURI" : {
+                    "$ref": "#.properities.targetURI" 
+                },
+                "sourceName": {
+                    "$ref": "#.properities.sourceName" 
+                },
+                "targetName": {
+                    "$ref": "#.properities.targetName" 
+                },
+                "status": {
+                    "$ref": "#.properities.status" 
+                },
+                "subject" : {
+                    "$ref": "#.properities.subject" 
+                },
+                "type" : {
+                    "$ref": "#.properities.type" 
+                },
+                "priority" : {
+                    "$ref": "#.properities.priority" 
+                },
+                "body" : {
+                    "$ref": "#.properities.body" 
+                },
+                "mediaURI" : {
+                    "$ref": "#.properities.mediaURI" 
+                },
+                "callId" : {
+                    "$ref": "#.properities.callId" 
+                },
+                "dispatchService" : {
+                    "$ref": "#.properities.dispatchService" 
+                },
+                "labels" : {
+                    "$ref": "#.properities.labels" 
+                },
+                "error" : {
+                    "$ref": "#.properities.error" 
+                } 
+            } 
+        },
+        {
+            "rel": "dispatched",
+            "href": "/messages/{uid}?status=dispatched",
+            "description": "Get all messages from an specific user that is in dispatched status" 
+        },
+        {
+            "rel": "call",
+            "href": "/calls/{uid}/{callId}",
+            "description": "Call that resulted in this message",
+            "targetSchema" : {
+                "$ref": "./callSchema.json" 
+            } 
+        },
+        {
+            "rel" : "dispatch",
+            "href": "/messages/{uid}/{id}",
+            "method" : [
+                "PUT",
+                "POST" 
+            ],
+            "description" : "A PUT or POST with dispatchService and status=queued results in a dispatch. A re-dispatch can be done if status was error during earlier dispatch",
+            "properties": {
+                "dispatchService" : {
+                    "$ref": "#.properties.dispatchService" 
+                },
+                "status" : {
+                    "$ref": "#.properties.status",
+                    "description" : "status must be set to queued" 
+                } 
+            } 
+        },
+        {
+            "rel": "re-transmit",
+            "href": "{dispatchService}",
+            "description": "Send this message using a message dispatch service",
+            "method": "post",
+            "properties": {
+                "$ref": "#.properties.messageURI" 
+            } ,
+            "targetSchema" : "dispatchStatusSchema.js" 
+        },
+        {
+            "rel": "media",
+            "href": "{mediaURI}",
+            "description": "Media file or folder associated with this message",
+            "targetSchema" : {
+                "$ref": "./mediaSchema.json" 
+            } 
+        } 
+    ]
+}

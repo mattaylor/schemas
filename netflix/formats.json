@@ -1,0 +1,10 @@
+{	"name"	: "Netflix Formats",
+	"id"		: "formats",
+	"extends: { "$ref":"./nfData.json"}
+
+   "properties": {
+	   "title"	: { "$ref":"title"},
+		"format"	: { "type":"string"},
+		"type"	: { "type":"string", "enum":["screen", "audio"]}
+	}
+}

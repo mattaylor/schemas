@@ -1,0 +1,200 @@
+{
+    "name": "Ribbit Media Schema",
+    "description" : "This is the Schema for Media Folder and File Descriptors and Permision Objects",
+    "type" : [
+        "array",
+        "object" 
+    ],
+    "additionalProperties": false,
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "properties" : {
+        "id" : {
+            "type" : "string",
+            "description": "[GET/POST] The media folder/file name.",
+            "maxLength": "80" 
+        },
+        "createdBy" : {
+            "type": "string",
+            "readonly": true,
+            "description": "[GET] The user id used to create folder/file",
+            "maxLength": "80" 
+        },
+        "createdWith": {
+            "type": "string",
+            "readonly": true,
+            "description": "[GET] (to be deprecated) The application id used to create folder/file",
+            "maxLength": "128" 
+        },
+        "createDate": {
+            "type" : "string",
+            "format": "date-time",
+            "readonly": true,
+            "description": "[GET] The date folder/file created" 
+        },
+        "readApps" : {
+            "type": "array",
+            "description": "[GET/PUT] (to be deprecated) List of application ids who have read permissions to this folder/file, part of folder/file ACL's",
+            "items": {
+                "type": "string",
+                "maxLength": "128" 
+            } 
+        },
+        "writeApps" : {
+            "type": "array",
+            "description": "[GET/PUT] (to be deprecated) List of application ids who have write permissions to this folder/file, part of folder/file ACL's",
+            "items": {
+                "type": "string",
+                "maxLength": "128" 
+            } 
+        },
+        "readUsers" : {
+            "type": "array",
+            "description": "[GET/PUT] List of user ids who have write permissions to this folder/file, part of folder/file ACL's",
+            "items": {
+                "type": "string",
+                "maxLength": "80" 
+            } 
+        },
+        "writeUsers": {
+            "type": "array",
+            "description": "[GET/PUT] List of user ids who have write permissions to this folder/file, part of folder/file ACL's",
+            "items": {
+                "type": "string",
+                "maxLength": "80" 
+            } 
+        },
+        "size" : {
+            "optional": true,
+            "readonly": true,
+            "type": "number",
+            "description": "File size in bytes" 
+        },
+        "domain" : {
+            "optional": true,
+            "readonly": true,
+            "maxLength": "128",
+            "type": "string" 
+        },
+        "folder" : {
+            "optional": true,
+            "readonly": true,
+            "maxLength": "80",
+            "type": "string" 
+        } 
+    },
+    "links" : [
+        {
+            "rel" : "createFolder",
+            "href" : "/media/{domain}",
+            "method": "post",
+            "description": "Create new media folder under the domain",
+            "properties": {
+                "id": {
+                    "$ref": "#.properties.id" 
+                } 
+            } 
+        },
+        {
+            "rel" : "createFile",
+            "href" : "/media/{domain}/{folder}/{id}",
+            "method" : "post",
+            "encType": "application/octet-stream",
+            "description": "Create new media file under the specified folder in the domain" 
+        },
+        {
+            "rel" : "instances",
+            "href" : "/media/{domain}/{folder}",
+            "method" : "get",
+            "description": "Get ACL's and details of all files under the specified folder in the domain" 
+        },
+        {
+            "rel" : "folderACL",
+            "href" : "/media/{domain}/{folder}/acl",
+            "method" : "get",
+            "description": "(to be deprecated) Get ACL's and details of the folder" 
+        },
+        {
+            "rel" : "self",
+            "href" : "/media/{domain}/{folder}/{id}/acl",
+            "method" : "get",
+            "description": "(to be deprecated) Get ACL's and details of the file (size is not supported in this view)" 
+        },
+        {
+            "rel" : "updateFolderACL",
+            "href" : "/media/{domain}/{folder}/acl",
+            "method": "put",
+            "description": "(to be deprecated) Change ACL's of the folder",
+            "properties": {
+                "id": {
+                    "$ref": "#.properties.id",
+                    "optional": true 
+                },
+                "readApps": {
+                    "$ref": "#.properties.readApps",
+                    "optional": true 
+                },
+                "writeApps": {
+                    "$ref": "#.properties.writeApps",
+                    "optional": true 
+                },
+                "readUsers": {
+                    "$ref": "#.properties.readUsers",
+                    "optional": true 
+                },
+                "writeUsers": {
+                    "$ref": "#.properties.writeUsers",
+                    "optional": true 
+                } 
+            } 
+        },
+        {
+            "rel" : "updateFileACL",
+            "href" : "/media/{domain}/{folder}/{id}/acl",
+            "method": "put",
+            "description": "(to be deprecated) Change ACL's of the file",
+            "properties": {
+                "id": {
+                    "$ref": "#.properties.id",
+                    "optional": true 
+                },
+                "readApps": {
+                    "$ref": "#.properties.readApps",
+                    "optional": true 
+                },
+                "writeApps": {
+                    "$ref": "#.properties.writeApps",
+                    "optional": true 
+                },
+                "readUsers": {
+                    "$ref": "#.properties.readUsers",
+                    "optional": true 
+                },
+                "writeUsers": {
+                    "$ref": "#.properties.writeUsers",
+                    "optional": true 
+                }
+            } 
+        },
+        {
+            "rel" : "download",
+            "href" : "/media/{domain}/{folder}/{id}",
+            "encType": "application/octet-stream",
+            "description": "Download a file" 
+        },
+        {
+            "rel" : "delete folder",
+            "href" : "/media/{domain}/{id}",
+            "method": "delete",
+            "description": "Delete the specified folder - will only work if the folder is empty" 
+        },
+        {
+            "rel" : "delete file",
+            "href" : "/media/{domain}/{folder}/{id}",
+            "method": "delete",
+            "description": "Delete the specified file" 
+        } 
+    ]
+}

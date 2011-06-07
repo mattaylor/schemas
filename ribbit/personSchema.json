@@ -1,0 +1,426 @@
+{
+    "name": "Portable Contacts Service",
+    "description": "Portable Contacts Servce",
+    "additionalProperties": false,
+    "type" : "object",
+    "items" : {
+        "$ref": "#" 
+    },
+    "properties": {
+        "entry" : {
+            "type" : [
+                "object",
+                "array" 
+            ],
+            "properties": {
+                "$ref": "#.properties" 
+            },
+            "items" : {
+                "type": "object",
+                "properties": {
+                    "$ref": "#.properties" 
+                } 
+            } 
+        },
+        "id" : {
+            "type": "string",
+            "readonly": true,
+            "maxLength": "80",
+            "description": "GUID of the user" 
+        },
+        "displayName": {
+            "type": "string",
+            "maxLength": "128" 
+        },
+        "name" : {
+            "type": "object",
+            "optional": true,
+            "properties" : {
+                "formatted": {
+                    "type": "string",
+                    "description": "The full name, including all middle names, titles, and suffixes as appropriate, formatted for display (e.g. Mr. Joseph Robert Smarr, Esq.). This is the Primary Sub-Field for this field, for the purposes of sorting and filtering.",
+                    "maxLength": "64" 
+                },
+                "familyName": {
+                    "type": "string",
+                    "description": "The family name of this Contact, or Last Name in most Western languages (e.g. Smarr given the full name Mr. Joseph Robert Smarr, Esq.).",
+                    "maxLength": "64" 
+                },
+                "givenName": {
+                    "type": "string",
+                    "description": "The given name of this Contact, or First Name in most Western languages (e.g. Joseph given the full name Mr. Joseph Robert Smarr, Esq.).",
+                    "maxLength": "64" 
+                },
+                "middleName": {
+                    "type": "string",
+                    "description": "The middle name(s) of this Contact (e.g. Robert given the full name Mr. Joseph Robert Smarr, Esq.)",
+                    "maxLength": "64" 
+                },
+                "honorificPrefix": {
+                    "type": "string",
+                    "description": "The honorific prefix(es) of this Contact, or Title in most Western languages (e.g. Mr. given the full name Mr. Joseph Robert Smarr, Esq.).",
+                    "maxLength": "64" 
+                },
+                "honorificSuffix": {
+                    "description": "The honorifix suffix(es) of this Contact, or Suffix in most Western languages (e.g. Esq. given the full name Mr. Joseph Robert Smarr, Esq.).",
+                    "maxLength": "64" 
+                } 
+            } 
+        },
+        "nickname" : {
+            "type": "string",
+            "maxLength": "128",
+            "optional": true 
+        },
+        "published" : {
+            "format": "date-time",
+            "optional": true 
+        },
+        "updated" : {
+            "format": "date-time",
+            "optional": true 
+        },
+        "birthday" : {
+            "format": "date-time",
+            "optional": true 
+        },
+        "connected" : {
+            "type" : "boolean",
+            "description": "Boolean value indicating whether the user and this Contact have established a bi-directionally asserted connection of some kind on the Service Provider's service. The value MUST be either true or false. The value MUST be true if and only if there is at least one value for the relationship field, described below, and is thus intended as a summary value indicating that some type of bi-directional relationship exists, for Consumers that aren't interested in the specific nature of that relationship. For traditional address books, in which a user stores information about other contacts without their explicit acknowledgment, or for services in which users choose to follow other users without requiring mutual consent, this value will always be false.",
+            "optional": true 
+        },
+        "utcOffset" : {
+            "type": "string" 
+        },
+        "note" : {
+            "type": "string",
+            "optional": true 
+        },
+        "gender" : {
+            "type": "string",
+            "enum": [
+                "male",
+                "female",
+                "undisclosed" 
+            ],
+            "optional": true 
+        },
+        "emails" : {
+            "type": "array",
+            "optional": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "value" : {
+                        "type": "string",
+                        "maxLength": "128",
+                        "format": "email" 
+                    },
+                    "type" : {
+                        "type": "string",
+                        "enum": [
+                            "work",
+                            "home",
+                            "other" 
+                        ] 
+                    },
+                    "primary": {
+                        "type": "boolean" 
+                    } 
+                } 
+            } 
+        },
+        "urls" : {
+            "type": "array",
+            "optional": true,
+            "items" : {
+                "type": "object",
+                "properties": {
+                    "value" : {
+                        "type": "string",
+                        "maxLength": "255",
+                        "format": "uri" 
+                    },
+                    "type" : {
+                        "type": "string",
+                        "enum": [
+                            "work",
+                            "home",
+                            "other",
+                            "blog",
+                            "profile" 
+                        ] 
+                    },
+                    "primary": {
+                        "type": "boolean" 
+                    } 
+                } 
+            } 
+        },
+        "phoneNumbers": {
+            "type": "array",
+            "optional": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "value" : {
+                        "type": "string",
+                        "maxLength": "64",
+                        "format": "tel" 
+                    },
+                    "type" : {
+                        "type": "string",
+                        "enum": [
+                            "work",
+                            "home",
+                            "other",
+                            "fax",
+                            "mobile",
+                            "pager" 
+                        ] 
+                    },
+                    "primary": {
+                        "type": "boolean" 
+                    } 
+                } 
+            } 
+        },
+        "ims" : {
+            "description": "Instant messaging address for this Contact. No official canonicalization rules exist for all instant messaging addresses, but Service Providers SHOULD remove all whitespace and convert the address to lowercase, if this is appropriate for the service this IM address is used for. Instead of the standard Canonical Values for type, this field defines the following Canonical Values to represent currently popular IM services: aim, gtalk, icq, xmpp, msn, skype, qq, and yahoo.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "optional": true,
+                "properties": {
+                    "value" : {
+                        "type": "string",
+                        "maxLength": "128" 
+                    },
+                    "type" : {
+                        "type": "string",
+                        "enum": [
+                            "aim",
+                            "gtalk",
+                            "xmpp",
+                            "msn",
+                            "icq",
+                            "skype",
+                            "qq",
+                            "yahoo" 
+                        ] 
+                    },
+                    "primary": {
+                        "type": "boolean" 
+                    } 
+                } 
+            } 
+        },
+        "photos" : {
+            "$ref": "#.properties.uris" 
+        },
+        "tags" : {
+            "type" : "array",
+            "items" : {
+                "type": "string",
+                "maxLength": "128" 
+            },
+            "optional" : true 
+        },
+        "relationships": {
+            "$ref": "#.properties.tags" 
+        },
+        "addresses" : {
+            "type" : "array",
+            "optional": true,
+            "items" : {
+                "type": "object",
+                "properties": {
+                    "formatted" : {
+                        "type": "string",
+                        "description": "The full mailing address, formatted for display or use with a mailing label. This field MAY contain newlines. This is the Primary Sub-Field for this field, for the purposes of sorting and filtering",
+                        "maxLength": "128" 
+                    },
+                    "streetAddress": {
+                        "type": "string",
+                        "description": "The full street address component, which may include house number, street name, PO BOX, and multi-line extended street address information. This field MAY contain newlines.",
+                        "maxLength": "128" 
+                    },
+                    "locality": {
+                        "type": "string",
+                        "description": "The city or locality component",
+                        "maxLength": "128" 
+                    },
+                    "region": {
+                        "type": "string",
+                        "description": "The state or region component",
+                        "maxLength": "64" 
+                    },
+                    "postalCode": {
+                        "type": "string",
+                        "description": "The zipcode or postal code component",
+                        "maxLength": "32" 
+                    },
+                    "country": {
+                        "type": "string",
+                        "description": "The country name component",
+                        "maxLength": "128" 
+                    } 
+                } 
+            } 
+        },
+        "organizations": {
+            "type": "array",
+            "description": "Describes a current or past organizational affiliation of this contact. Service Providers that support only a single Company Name and Job Title field should represent them with a single organization  element with name and title properties, respectively.",
+            "optional": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the organization (e.g. company, school, or other organization). This field MUST have a non-empty value for each organization returned. This is the Primary Sub-Field for this field, for the purposes of sorting and filtering." 
+                    },
+                    "department": {
+                        "type": "string",
+                        "description": "The department within this organization",
+                        "maxLength": "128" 
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "The job title or role within this organization",
+                        "maxLength": "128" 
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The type of organization, with Canonical Values job and school",
+                        "maxLength": "128" 
+                    },
+                    "startDate": {
+                        "format": "date-time",
+                        "type": "string",
+                        "description": "The date this Contact joined this organization. This value SHOULD be a valid xs:date if possible, but MAY be an unformatted string, since it is recognized that this field is often presented as free-text." 
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "description": "The date this Contact left this organization or the role specified by title within this organization. This value SHOULD be a valid xs:date if possible, but MAY be an unformatted string, since it is recognized that this field is often presented as free-text." 
+                    },
+                    "location": {
+                        "type": "string",
+                        "description": "The physical location of this organization. This may be a complete address, or an abbreviated location like San Francisco" 
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A textual description of the role this Contact played in this organization. This field MAY contain newlines." 
+                    } 
+                } 
+            } 
+        },
+        "accounts": {
+            "type": "array",
+            "optional": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "domain": {
+                        "type": "string",
+                        "description": "The top-most authoritative domain for this account, e.g. twitter.com. This is the Primary Sub-Field for this field, for the purposes of sorting and filtering.",
+                        "maxLength": "128" 
+                    },
+                    "username": {
+                        "type": "string",
+                        "description": "An alphanumeric user name, usually chosen by the user, e.g. jsmarr.",
+                        "maxLength": "128" 
+                    },
+                    "userid": {
+                        "type": "string",
+                        "description": "A user ID number, usually chosen automatically, and usually numeric but sometimes alphanumeric, e.g. 12345 or 1Z425A.",
+                        "maxLength": "128" 
+                    } 
+                } 
+            } 
+        },
+        "address" : {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "formatted" : {
+                        "type": "string",
+                        "description": "The full mailing address, formatted for display or use with a mailing label. This field MAY contain newlines. This is the Primary Sub-Field for this field, for the purposes of sorting and filtering" 
+                    },
+                    "streetAddress": {
+                        "type": "string",
+                        "description": "The full street address component, which may include house number, street name, PO BOX, and multi-line extended street address information. This field MAY contain newlines." 
+                    },
+                    "locality": {
+                        "type": "string",
+                        "description": "The city or locality component" 
+                    },
+                    "region": {
+                        "type": "string",
+                        "description": "The state or region component" 
+                    },
+                    "postalCode": {
+                        "type": "string",
+                        "description": "The zipcode or postal code component" 
+                    },
+                    "country": {
+                        "type": "string",
+                        "description": "The country name component" 
+                    } 
+                } 
+            } 
+        },
+        "count": {
+            "type": "string",
+            "description": "Number of search results per page desired." 
+        },
+        "totalResults": {
+            "type": "string",
+            "description": "Number of search results available." 
+        },
+        "startIndex": {
+            "type": "string",
+            "description": "Index of the first search result desired." 
+        },
+        "filterBy": {
+            "type": "string",
+            "description": "Specifies the field name to filter by." 
+        },
+        "filterValue": {
+            "type": "string",
+            "description": "Specifies the value to filter by, using the comparison method defined by filterOp." 
+        },
+        "filterOp": {
+            "type": "string",
+            "description": "Specifies the comparison method used to evaluate the field value with the value of the filter criterion." 
+        } 
+    },
+    "links" : [
+        {
+            "rel": "full",
+            "href": "/services/ribbit/people/{uid}/@all/{id}" 
+        },
+        {
+            "rel": "instances",
+            "href": "/services/ribbit/people/{uid}/@all",
+            "properties": {
+                "filterBy": {
+                    "$ref": "#.filterBy" 
+                },
+                "filterValue": {
+                    "$ref": "#.filterValue" 
+                },
+                "startIndex": {
+                    "$ref": "#.startIndex" 
+                },
+                "filterOp": {
+                    "$ref": "#.filterOp" 
+                } 
+            } 
+        },
+        {
+            "rel": "friends",
+            "href": "/services/ribbit/people/{uid}/@friends" 
+        } 
+    ]
+}

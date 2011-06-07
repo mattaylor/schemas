@@ -1,0 +1,23 @@
+{	"name"	: "Netflix Users",
+	"id"		: "Users",
+	"extends: { "$ref":"./nfData.json"}
+	"readonly":false,
+
+   "properties": {
+      "firstName"	: { "type":"string"},
+	   "lastName"	: { "type":"string"},
+		"canInstant": { "type":"boolean"},
+		"formatPrefs":{ "type":"array", "items": {
+			"type":"string", "enum":["dvd", "hdDvd", "bluRay" ]
+		} }
+	},
+
+	"links": [
+		{ "rel":"recomendations", "href":"/users/{id}/ratings?actual=false&sort(-rating)", "targetSchema":"ratings" },
+		{ "rel":"reviews", "href":"/reviews?user.id={id}", "targetSchema":"reviews" },
+		{ "rel":"instantQueue", "href":"/users/{id}/queues?type=instant", "targetSchema":"queues" },
+		{ "rel":"dvdQueue", "href":"/users/{id}/queues?type=dvd", "targetSchema":"queues" },
+		{ "rel":"atHome", "href":"/users/{id}/history?returned=null", "targetSchema":"history" },
+		{ "rel":"titleStates", "href":"/users/{id}/states/{id}", "targetSchema":"states" }
+	]
+}

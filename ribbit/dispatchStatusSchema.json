@@ -1,0 +1,84 @@
+{
+    "name": "Ribbit Message Dispatch Status",
+    "description" : "This schema is supported by all message dispatchers for history of tranmission attempts on a message and status of each attempt",
+    "additionalProperties": false,
+    "type" : [
+        "object",
+        "array" 
+    ],
+    "items" : {
+        "$ref": "#" 
+    },
+    "properties" : {
+        "id" : {
+            "description": "[GET] Unique Message transmission attempt by Message Dispatcher",
+            "readonly": true 
+        },
+        "messageURI": {
+            "description": "[GET] URI of the Message that is being dispatched",
+            "type" : "string",
+            "format": "uri",
+            "maxLength": "128",
+            "readonly": true 
+        },
+        "status" : {
+            "description" : "[GET] Status of message transmission attempt",
+            "type" : "string",
+            "readonly": true,
+            "enum": [
+                "sent",
+                "pending",
+                "failed" 
+            ] 
+        },
+        "statusDate": {
+            "description" : "[GET] Timestamp when message transmission was attempted",
+            "type" : "string",
+            "format": "date-time",
+            "readonly": true 
+        },
+        "error" : {
+            "description": "[GET] Optional error message as returned from the delivery gateway when message transmission was attempted",
+            "type" : "string",
+            "maxLength": "128",
+            "readonly" : true,
+            "optional" : true 
+        },
+        "dispatcher": {
+            "$ref": "dispatchSchema.properties.id",
+            "optional" : true 
+        } 
+    },
+    "links": [
+        {
+            "rel": "create",
+            "href": "/services/ribbit/dispatcher/{dispatcher}",
+            "method" : "post",
+            "properties": {
+                "messageUri": {
+                    "$ref": "#.properties.messageURI" 
+                } 
+            } 
+        },
+        {
+            "rel": "instances",
+            "href": "/services/ribbit/dispatcher/{dispatcher}",
+            "description" : "Get dispatch attempt status history for specified message",
+            "properties": {
+                "messageURI": {
+                    "$ref": "#.properties.messageURI" 
+                } 
+            } 
+        },
+        {
+            "rel": "self",
+            "href": "/services/ribbit/dispatcher/{dispatcher}/{id}",
+            "description" : "Get specific dispatch attempt status" 
+        },
+        {
+            "rel": "describedBy",
+            "href": "{messageURI}",
+            "targetSchema": "messageSchema.js" 
+        } 
+    ]
+}

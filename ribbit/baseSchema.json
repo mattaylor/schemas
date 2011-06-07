@@ -1,0 +1,185 @@
+{
+    "name": "Ribbit TBASE Schema",
+    "description": "TEST This is the base REST API schema",
+    "version": "2.0",
+    "path": "/rest/{version}",
+    "extends": {
+        "$ref": "./hyperSchema.json"
+    },
+    "type": [
+        "object",
+        "array"
+    ],
+    "additionalProperties": false,
+    "items" : {
+        "type": "object",
+        "properties": {
+            "$ref": "#.properties" 
+        } 
+    },
+    "properties": {
+        "entry": {
+            "type": [
+                "object",
+                "array"
+            ],
+            "description": "'Entry' added for backcompatibility - should be deprecated",
+            "properties": {
+                "$ref": "#.properites" 
+            },
+            "items" : {
+                "type": "object",
+                "properties": {
+                    "$ref": "#.properties"
+                } 
+            },
+            "optional": true 
+        },
+        "id": {
+            "type": [
+                "string",
+                "number"
+            ],
+            "description": "Unique Instance Identifier",
+            "readonly": true,
+            "optional": false 
+        },
+        "status": {
+            "type": "string",
+            "description": "Status",
+            "enum": [
+                "pending",
+                "active",
+                "suspended",
+                "terminated"
+            ],
+            "readonly": true,
+            "optional": true 
+        },
+        "statusDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The Date the status of this Resource was last Changed",
+            "readonly": true,
+            "optional": true 
+        },
+        "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date this resource was created",
+            "readonly": true,
+            "optional": true 
+        },
+        "modifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date the resrouce was last modified",
+            "readonly": true,
+            "optional": true 
+        },
+        "parentId": {
+            "type": "string",
+            "description": "The Parent Item of this item",
+            "optional": true,
+            "readonly": true 
+        },
+        "labels": {
+            "type": "array",
+            "description": "labels for organising this resource",
+            "optional": true,
+            "items": {
+                "type": "string" 
+            } 
+        },
+        "meta": {
+            "type": "array",
+            "description": "meta data associated with this resource",
+            "items": {
+                "ref": "metaSchema.js" 
+            },
+            "optional": true 
+        },
+        "uid": {
+            "type": "string",
+            "description": "The user that owns this resource",
+            "optional": true 
+        } 
+    },
+    "links": [
+        {
+            "rel": "full",
+            "href": "/{path}/{name}/{uid}/{id}" 
+        },
+        {
+            "rel": "instances",
+            "href": "/{path}/{name}/{uid}",
+            "properties": {
+                "filterBy": {
+                    "type": "string" 
+                },
+                "filterValue": {
+                    "type": "string" 
+                } 
+            } 
+        },
+        {
+            "rel": "create",
+            "href": "/{path}/{name}/{uid}",
+            "method": "post" 
+        },
+        {
+            "rel": "children",
+            "href": "/{path}/{name}/{uid}/fiterBy=parentId&filterValue={parentId}" 
+        },
+        {
+            "rel": "parent",
+            "href": "/{path}/{name}/{uid}/{parentId}" 
+        },
+        {
+            "rel": "describedBy",
+            "href": "/meta/{meta.id}" 
+        } 
+    ],
+    "examples": {
+        "createItem": {
+            "href" : "/{path}/{name}/{uid}",
+            "method" : "POST",
+            "response" : {
+                "status": "200 OK",
+                "header": [
+                    "LOCATION:/{path}/{name}/{uid}/{id}"
+                ] 
+            } 
+        },
+        "getItems" : {
+            "href" : "/{path}/{name}/{uid}",
+            "response" : {
+                "bodyMatch" : {
+                    "id": "{id}" 
+                } 
+            } 
+        },
+        "getItem" : {
+            "href" : "/{path}/{name}/{uid}/{id}",
+            "response" : {
+                "bodyMatch" : {
+                    "id": "{id}" 
+                } 
+            } 
+        },
+        "updateItem": {
+            "href" : "/{path}/{name}/{uid}/{id}",
+            "method": "PUT",
+            "response" : {
+                "status" : "202 REMOVED" 
+            } 
+        },
+        "deleteItem": {
+            "href" : "/{path}/{name}/{uid}/{id}",
+            "method": "DELETE",
+            "response" : {
+                "status" : "202 REMOVED" 
+            } 
+        } 
+    }
+}

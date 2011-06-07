@@ -1,0 +1,17 @@
+{	"name"	: "Netflix User Data",
+	"id"		: "nfUser.json",
+	"extends: { "$ref":"./nfData.json"}
+
+   "properties": {
+      "user"	: { "$ref":"user",  "type":"object"},
+	   "title"	: { "$ref":"title", "type":"obejct"}
+	},
+
+	"links": [
+		{	"rel":"instances", "href":"/users/{user.id}/{schema}", "properties": {
+				"titleRefs": { "type":"array", "items":{ "type":"string"} }
+			}
+		},
+		{	"rel":"self", "href":"/users/{user.id}/{schema}/{id}" }
+	]
+}

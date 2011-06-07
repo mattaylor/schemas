@@ -1,0 +1,77 @@
+{
+    "name": "Ribbit VTT Service Schema",
+    "description": "VTT Service",
+    "extends" : {
+        "$ref": "./baseSchema.json" 
+    },
+    "additionalProperties": false,
+    "type" : [
+        "object",
+        "array" 
+    ],
+    "items" : {
+        "$ref": "#" 
+    },
+    "readonly": true,
+    "properties": {
+        "providerId": {
+            "type": "string",
+            "description": "[GET/POST/PUT] Provider name",
+            "readonly": true 
+        },
+        "folders": {
+            "type": "array",
+            "description": "[GET/PUT] The folder to Watch - must have read access to these folders",
+            "items": {
+                "type": "string",
+				"maxLength": "80",
+                "optional": true 
+            } 
+        },
+        "mediaURI": {
+            "type": "string",
+            "description": "[POST] File path",
+			"maxLength": "255",
+            "format": "uri" 
+        },
+        "uid" : {
+            "type": "string",
+            "readonly": true,
+            "hidden": true,
+            "maxLength": "80",
+            "optional": true 
+        } 
+    },
+    "links" : [
+        {
+            "rel": "providers",
+            "description": "Get a list of transcription providers",
+            "href": "/services/ribbit/vtt" 
+        },
+        {
+            "rel": "full",
+            "description": "Get all Folders being monitored for a given provider by a given user",
+            "href": "/services/ribbit/vtt/{providerId}/{uid}" 
+        },
+        {
+            "rel": "foldertranscription",
+            "description": "Set folders to be monitored for a given provider by a given user",
+            "href": "/services/ribbit/vtt/{providerId}/{uid}",
+            "method" : "put" 
+        },
+        {
+            "rel" : "filetranscription",
+            "description": "This link can be used to transcribe a file on demand by passing a URI, which should return a LOCATION: reference to the transcribed txt file, which will have the name as follows: <filename>.<providerId>.txt",
+            "href" : "/services/ribbit/vtt/{providerId}",
+            "method" : "post",
+            "properties": {
+                "mediaURI": {
+                    "$ref": "#.properities.mediaURI" 
+                } 
+            },
+            "targetSchema": {
+                "$ref": "./mediaSchema.json" 
+            } 
+        } 
+    ]
+}

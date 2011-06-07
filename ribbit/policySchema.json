@@ -1,0 +1,107 @@
+{
+    "name": "Policy Schema",
+    "description": "Policies represent permissions or capabilities to act on specific resources. Policies are associated with a token, and grant the corresponding permissions to any application that presents this token",
+    "additonalProperties": false,
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "properties": {
+        "id": {
+            "type" : [
+                "string",
+                "number" 
+            ],
+            "description": "[GET] Unique Instance Identifier",
+            "readonly": true 
+        },
+        "uri" : {
+            "type" : "string",
+            "format": "regex",
+            "maxLength": "256",
+            "description": "[GET/PUT/POST] The resource that this policy authorises the token access to" 
+        },
+        "params" : {
+            "type" : "string",
+            "format" : "regex",
+            "maxLength": "1024",
+            "description": "[GET/PUT/POST] Params represents a regular expression that must match the JSON in the POST or PUT body for the request accompanied by this token to be authorised",
+            "optional": true 
+        },
+        "method" : {
+            "enum" : [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE" 
+            ],
+            "description": "[GET/PUT/POST] The method that this policy authorises the token to be used for",
+            "type": "string" 
+        },
+        "usageBalance" : {
+            "type" : "number",
+            "description": "[GET/PUT/POST] The number of times this policy authorises the token to be used to gain access to the specified resource",
+            "minimum": 0,
+            "maximum": 1000000,
+            "optional": true 
+        },
+        "token" : {
+            "optional": true,
+            "readonly": true,
+            "type": "string",
+            "maxLength": "80",
+            "description": "The token this policy applies to" 
+        },
+        "uid" : {
+            "optional": true,
+            "readonly": true,
+            "type": "string",
+            "maxLength": "80",
+            "description": "The guid of the user who owns the token this policy applies to" 
+        } 
+    },
+    "links": [
+        {
+            "rel": "full",
+            "href": "/policies/{uid}/{token}/{id}",
+            "description": "Details of a specific token policy" 
+        },
+        {
+            "rel": "instances",
+            "href": "/policies/{uid}/{token}",
+            "description": "List all policies for a token" 
+        },
+        {
+            "rel": "create",
+            "href": "/policies/{uid}/{token}",
+            "description": "Create a new token policy",
+            "method": "post",
+            "properties" : {
+                "uri" : {
+                    "$ref": "#.properties.uri" 
+                },
+                "params": {
+                    "$ref": "#.properties.params" 
+                },
+                "method": {
+                    "$ref": "#.properties.method" 
+                },
+                "usageBalance": {
+                    "$ref": "#.properties.usageBalance" 
+                } 
+            } 
+        },
+        {
+            "rel": "modify",
+            "href": "/tokens/{uid}/{token}/{id}",
+            "method": "put",
+            "description": "Update token policy properties" 
+        },
+        {
+            "rel": "delete",
+            "href": "/tokens/{uid}/{token}/{id}",
+            "method": "delete",
+            "description": "Delete token policy" 
+        } 
+    ]
+}

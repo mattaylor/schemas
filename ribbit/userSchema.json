@@ -1,0 +1,191 @@
+{
+    "name": "User Schema",
+    "description": "Users represent the owners of resources such as Calls, Devices, Messages etc.. And are in turn represented by a set of login creditentials to the Ribbit platform",
+    "type": [
+        "array",
+        "object" 
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "additionalProperties": false,
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "[GET/DELETE] Globally Unique User Identifier",
+            "maxLength": "80",
+            "readonly": true 
+        },
+        "login": {
+            "type": "string",
+            "description": "[GET/POST] The user's Primary Login to Ribbit",
+            "minLength": "4",
+            "maxLength": "255",
+            "readonly": false 
+        },
+        "password": {
+            "type": "string",
+            "description": "[PUT/POST] The users password - The lengths below are for the encrypted password. Refer to Developer Guide for encryption & password rules",
+            "minLength": "172",
+            "maxLength": "516" 
+        },
+        "firstName": {
+            "type": "string",
+            "description": "[GET/PUT/POST] First name",
+            "maxLength": "80",
+            "optional": true 
+        },
+        "lastName": {
+            "type": "string",
+            "description": "[GET/PUT/POST] Last name",
+            "maxLength": "80",
+            "optional": true 
+        },
+        "createdBy": {
+            "type": "string",
+            "description": "[GET] Id of application that created this user",
+            "maxLength": "128",
+            "readonly": true 
+        },
+        "createDate": {
+            "type": "string",
+            "description": "[GET] Date and time the user was created. The date format is: yyyy-MM-ddTHH:mm:ssZ",
+            "format": "date-time",
+            "readonly": true 
+        },
+        "domain": {
+            "type": "string",
+            "description": "[GET] Domain Id of the user. INTERNAL apps can create users in different domains.",
+            "maxLength": "128" 
+        },
+        "billingId" : {
+            "type": "string",
+            "description": "[GET] Id of SBI implementation (currently MP port of mini-billing server)",
+            "maxLength": "40",
+            "readonly": true 
+        },
+        "dialPlan": {
+            "type": "string",
+            "description": "[GET/PUT/POST] The Dialplan for this user - represents how calls are terminated",
+            "maxLength": "80",
+            "optional": true 
+        },
+        "appAdmin": {
+            "type": "boolean",
+            "description": "[GET/PUT/POST] User's role as app admin for the domain",
+            "optional": true 
+        } 
+    },
+    "links": [
+        {
+            "rel": "instances",
+            "description": "List all users and the supported filters below",
+            "href": "/users",
+            "properties" : {
+                "id" : {
+                    "$ref": "#.properities.id" 
+                },
+                "firstName" : {
+                    "$ref": "#.properities.firstName" 
+                },
+                "lastName" : {
+                    "$ref": "#.properities.lastName" 
+                },
+                "dialPlan" : {
+                    "$ref": "#.properities.dialPlan" 
+                },
+                "createdBy" : {
+                    "$ref": "#.properities.createdBy" 
+                },
+                "domain" : {
+                    "$ref": "#.properities.domain" 
+                },
+                "login" : {
+                    "$ref": "#.properties.login" 
+                } 
+            } 
+        },
+        {
+            "rel" : "full",
+            "href" : "/users/{id}",
+            "description" : "Details of a specific user" 
+        },
+        {
+            "rel" : "create",
+            "method" : "post",
+            "href" : "/users",
+            "description" : "Create a new user",
+            "properties": {
+                "firstName" : {
+                    "$ref": "#.properties.firstName" 
+                },
+                "lastName" : {
+                    "$ref": "#.properties.lastName" 
+                },
+                "login" : {
+                    "$ref": "#.properties.login" 
+                },
+                "password" : {
+                    "$ref": "#.properties.password" 
+                },
+                "domain" : {
+                    "$ref": "#.properties.domain",
+                    "description": "If the domain is missing then the domain will be that of the requesting app. Domains other than that of the requesting app may only be set if the the app is INTERNAL" 
+                } 
+            } 
+        },
+        {
+            "rel" : "modify",
+            "href" : "/users/{id}",
+            "method" : "put",
+            "description" : "Update user properties" 
+        },
+        {
+            "rel" : "delete",
+            "href" : "/users/{id}",
+            "method" : "delete",
+            "description" : "delete user" 
+        },
+        {
+            "rel" : "devices",
+            "description": "Devices of a user",
+            "href" : "/devices/{id}",
+            "targetSchema": {
+                "$ref": "./deviceSchema.json" 
+            } 
+        },
+        {
+            "rel" : "calls",
+            "description": "Calls of a user",
+            "href" : "/calls/{id}",
+            "targetSchema" : {
+                "$ref": "./callSchema.json" 
+            } 
+        },
+        {
+            "rel" : "messages",
+            "description": "Messages of a user",
+            "href" : "/messages/{id}",
+            "targetSchema": {
+                "$ref": "./messageSchema.json" 
+            } 
+        },
+        {
+            "rel" : "tokens",
+            "description": "Tokens of a user",
+            "href" : "tokens/{id}",
+            "targetSchema": {
+                "$ref": "./tokenSchema.json" 
+            } 
+        },
+        {
+            "rel" : "media",
+            "description": "Media folder of a user",
+            "href" : "media/{domain}/{id}",
+            "targetSchema": {
+                "$ref": "./mediaSchema.json" 
+            } 
+        } 
+    ]
+}

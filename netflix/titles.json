@@ -1,0 +1,47 @@
+{	"name": "Netflix Titles Schema",
+	"id"	: "titles",
+	"extends: { "$ref":"./nfData.json"}
+
+   "properties": {
+      "title"		: { "type":"string" },
+	   "summary"	: { "type":"string" },
+		"synopsis"	: { "type":"string" },
+		"shortSyn"	: { "type":"string" },
+		"avRating"	: { "type":"number" },
+		"releasedOn": { "type":"string", "format":"date"},
+		"url"			: { "type":"string", "format":"url"},
+		"runtime"	: { "type":"number"},
+		"mpaaRate"	: { "type":"string", "enum":["R", "G", "PG"] },
+		"shortName" : { "type":"string"},
+		"tinyUrl"	: { "type":"string", "format":"url"},
+		"boxArt"		: { "type":"object", "properties": {
+			"smallUrl"	: { "type":"string", "format":"url"},
+			"mediumUrl"	: { "type":"string", "format":"url"},
+			"largeUrl"	: { "type":"string", "format":"url"},
+			"hiDefUrl"	: { "type":"string", "format":"url"}
+		} },
+		"dvd"	: {	"type":"object", "properties": {
+				"available"	: { "type":"boolean" },
+				"availFrom"	: { "type":"string", "format":"date" },
+				"availTo"	: { "type":"string", "format":"date" },
+				"hdAVailable":{ "type":"boolean"},
+				"runtime"	: { "$ref":"#.properties.runtime"},
+				"rating"		: { "$ref":"#.properties.rating"}
+		} },
+		"bluRay"	: { "$ref":"#.properties.dvd" },
+		"instant": { "$ref":"#.properties.dvd" },
+		"series"	: { "$ref":"series"},
+		"rank"	: { "type":"number", "description":"The postion of this title in it's series" }
+	},
+	"links": [
+		{	"rel":"audioFormats", "href":"/formats?title.id={id}&type=audio", "targetSchema":"formats" },
+		{	"rel":"screenFormats", "href":"/formats?title.id={id}&type=audio", "targetSchema":"formats" },
+		{	"rel":"genres", "href":"/genres?title.id={id}", "targetSchema":"genres"	},
+		{	"rel":"series", "href":"/titles?series.id={series.id}&sort(+rank)" },
+		{	"rel":"languages", "href":"/languguges?title.id={id}", "targetSchema":"languages"},
+		{	"rel":"similar", "href":"/similar?title.id={id}", "targetSchema":"similar"},
+		{	"rel":"awards", "href":"/awards?title.id={id}", "targetSchema":"awards" },
+		{	"rel":"cast", "href":"/credits?title.id={id}&role=actor", "targetSchema":"credits" },
+		{	"rel":"directors", "href":"/credits?title.id={id}&roles=director", "targetSchema":"credits" }
+	]
+}

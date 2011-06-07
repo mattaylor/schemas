@@ -1,0 +1,49 @@
+{
+    "name": "Whitepages Lookup",
+    "description": "Lookup details of a person given a number",
+    "additionalProperties": false,
+    "type": [
+        "array",
+        "object" 
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "readonly": true,
+    "properties": {
+        "tel": {
+            "type": "string",
+            "format": "tel",
+            "description": "[GET] The number to be looked up" 
+        },
+        "name": {
+            "type": "string",
+            "optional": true,
+            "description": "[GET] The Name returned of the owner" 
+        },
+        "address": {
+            "type": "string",
+            "optional": true,
+            "description": "[GET] The street address associated to the tel" 
+        },
+        "date" : {
+            "type": "string",
+            "format": "date-time",
+            "optional": true,
+            "description": "[GET] The date of this last lookup" 
+        },
+        "additionalInfo" : {
+            "type": "string",
+            "optional": true,
+            "description": "[GET] Any additonal information about this number" 
+        } 
+    },
+    "links" : [
+        {
+            "rel": "instances",
+            "description": "lookup name by number",
+            "href": "/services/ribbit/whitepages/{tel}" 
+        } 
+    ]
+}

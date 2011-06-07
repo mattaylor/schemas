@@ -1,0 +1,10 @@
+{	"name": "Netflix Credits Schema",
+	"id"	: "credits",
+	"extends: { "$ref":"./nfData.json.json"}
+
+   "properties": {
+      "title"	: { "$ref":"titles" },
+		"person"	: { "$ref":"people"},
+		"role"	: { "type":"string", "enum":["actor", "director", "other"] }
+	}
+}

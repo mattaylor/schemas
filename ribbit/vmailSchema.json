@@ -1,0 +1,71 @@
+{
+    "name": "Ribbit Voicemail Service",
+    "description": "User specific voicemail service configuration.",
+    "extends": {
+        "$ref": "./baseSchema.json" 
+    },
+    "additionalProperties": false,
+    "type": [
+        "object",
+        "array" 
+    ],
+    "items": {
+        "$ref": "#" 
+    },
+    "readonly": true,
+    "properties": {
+        "id": {
+            "description": "[GET] GUID of the user.",
+            "type": "string",
+            "readonly": true 
+        },
+        "pin": {
+            "description": "[GET/PUT] Voicemail Access PIN Code.",
+            "type": "number" 
+        },
+        "country": {
+            "description": "[GET/PUT] User country.",
+            "type": "string" 
+        },
+        "greetingFile": {
+            "description": "[GET/PUT] URI to the greeting file, e.g. https://rest.ribbit.com/rest/1.0/media/r4m.ribbit.com/folder/greeting.mp3. When greetingFile is defined for a given user, voicemail service does not use nameFile (from user specific voicemail configuration) or global configurations for greeting (see vmailConfig service), i.e. voicemail system plays only the audio defined by greetingFile.",
+            "type": "string",
+            "format": "uri",
+            "optional": true 
+        },
+        "nameFile": {
+            "description": "[GET/PUT] URI to the name file, e.g. https://rest.ribbit.com/rest/1.0/media/r4m.ribbit.com/folder/name.mp3. nameFile is only used if greetingFile is not defined for the given user. Voicemail service plays the media file indicated in nameFile (if any) followed by the global greeting defined in vmailConfig service. If nameFile is not defined, voicemail system plays phone digits followed by the global greeting.",
+            "type": "string",
+            "format": "uri",
+            "optional": true 
+        },
+        "voiceFont": {
+            "description": "[GET/PUT] Voicemail voice files for this user.",
+            "type": "string",
+            "default": "us_en",
+            "enum": [
+                "us_en_female",
+                "us_en_male",
+                "us_en" 
+            ] 
+        } 
+    },
+    "links": [
+        {
+            "rel": "self",
+            "href": "/services/ribbit/vmail/prefs/{uid}" 
+        },
+        {
+            "rel": "update",
+            "href": "/services/ribbit/vmail/prefs/{uid}",
+            "method": "put" 
+        },
+        {
+            "rel": "Voicemail messages",
+            "href": "/messages/{uid}?type=voice",
+            "targetSchema": {
+                "$ref": "./messageSchema.json" 
+            } 
+        } 
+    ]
+}

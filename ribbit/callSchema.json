@@ -1,0 +1,475 @@
+{
+    "name": "Call Schema",
+    "description": "Call represents individual call legs to or from the platform",
+    "type": [
+        "array",
+        "object" 
+    ],
+    "items": {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "additionalProperties": false,
+    "properties": {
+        "id": {
+            "description": "[GET] Unique Call instance identifier, created by the system when incoming calls are received or when outgoing calls are created through REST API.",
+            "type": "string",
+            "maxLength": "20",
+            "readonly": true 
+        },
+        "externalRefId": {
+            "description": "[GET/POST] Application provided identifier for the call. This id is controlled by the application and the platform just stores and sends it back on GET operations and events for the call.",
+            "type": "string",
+            "maxLength": "255",
+            "readonly": true,
+            "optional": true 
+        },
+        "bridgeId": {
+            "description": "[GET/POST/PUT] The Conference Bridge Id for a Call. When provided in POST and PUT operations, bridgeId should indicate an active bridge, otherwise the operation will result in failure. If bridgeId is assigned an empty string, the call will be detached from its current bridge and moved to a new bridge.",
+            "type": "string",
+            "maxLength": "20",
+            "optional": true 
+        },
+        "sourceURI": {
+            "description": "[GET/POST] The source device, e.g.: tel:+3035551111. sourceURI must either be null or a verified device. if sourceURI is null or not verified then targetURI must be a verified device.",
+            "type": "string",
+            "maxLength": "255",
+            "readonly": true,
+            "format": "uri" 
+        },
+        "targetURI": {
+            "description": "[GET/POST] The target device, e.g.: tel:+3035552222. Supported schemes include skype:, flash:, xmpp, msn, tel and sip. If sourceURI is null or not verified then targetURI must be a verified device.",
+            "type": "string",
+            "maxLength": "255",
+            "readonly": true,
+            "format": "uri" 
+        },
+        "sourceName": {
+            "description": "[GET/POST] The caller Id displayed on an outbound call (only present on outbound calls).",
+            "type": "string",
+            "maxLength": "255",
+            "readonly": true,
+            "optional": true 
+        },
+        "targetName": {
+            "description": "[GET/POST] The name of the callee.",
+            "type": "string",
+            "maxLength": "255",
+            "readonly": true,
+            "optional": true 
+        },
+        "divertURI": {
+            "description": "[GET] The number the call was diverted from",
+            "readonly": true,
+            "maxLength": "255",
+            "optional": true,
+            "type":"string",
+            "format":"uri"
+        },
+        "uid": {
+            "description": "The owner of the call",
+            "maxLength": "80",
+            "type": "string",
+            "readonly": true,
+            "optional": true 
+        },
+        "startTime": {
+            "description": "[GET] Call start time (Zulu time).",
+            "type": "string",
+            "format": "date-time",
+            "readonly": true 
+        },
+        "connectedTime": {
+            "description": "[GET] Call connected time (Zulu time).",
+            "type": "string",
+            "format": "date-time",
+            "readonly": true,
+            "optional": true 
+        },
+        "endTime": {
+            "description": "[GET] Call end time (Zulu time).",
+            "type": "string",
+            "format": "date-time",
+            "readonly": true,
+            "optional": true 
+        },
+        "direction": {
+            "description": "[GET] Call direction.",
+            "type": "string",
+            "readonly": true,
+            "optional": true,
+            "enum": [
+                "inbound",
+                "outbound" 
+            ] 
+        },
+        "status": {
+            "description": "[GET/PUT] The status for a Call. Valid inbound call transitions: events_queued:[initiated,terminate] initiated:[ringing,earlyMedia,connected,terminated], ringing:[earlyMedia,connected,terminated], earlyMedia:[connected,terminated], connected:[terminated].",
+            "type": "string",
+            "optional": true,
+            "enum": [
+                "events_queued",
+                "initiated",
+                "ringing",
+                "earlyMedia",
+                "connected",
+                "terminated" 
+            ] 
+        },
+        "active": {
+            "description": "[GET] True if the Call is not terminated.",
+            "type": "boolean",
+            "readonly": true 
+        },
+        "mode": {
+            "description": "[GET/POST/PUT] The Connection Mode of a Call.",
+            "type": "string",
+            "enum": [
+                "talk",
+                "mute",
+                "hold" 
+            ] 
+        },
+        "statusDate": {
+            "description": "[GET] The date the status field of this Call was last updated.",
+            "type": "string",
+            "format": "date-time",
+            "optional": true,
+            "readonly": true 
+        },
+        "cause": {
+            "type": "object",
+            "description": "[GET] Reason for the call termination",
+            "readonly": true,
+            "properties": {
+                "code": {
+                    "type": "number",
+                    "description": "The SIP Response Code which terminated the call. Supported Local Causes could include 200 - Normal clear (ISDN 16),302 - Moved Temporarily (ISDN ???), 402 - Payment Required , 403 Forbidden, 404 - Not Found (ISDN 1, 2, 3), 408 Request Timeout, 500 - Internal Server Error, etc." 
+                },
+                "detail": {
+                    "type": "string",
+                    "description": "Additional Information associated with this call (eg transfered destination or SIP response code description)",
+                    "maxLength": "255",
+                    "optional": true 
+                },
+                "source": {
+                    "type": "string",
+                    "description": "Remote causes are received from the network, local causes are generated by Ribbit",
+                    "enum": [
+                        "remote",
+                        "local" 
+                    ] 
+                } 
+            } 
+        },
+        "recordedFiles": {
+            "description": "[GET] Array of media URI's recorded in the Call.",
+            "type": "array",
+            "optional": true,
+            "readonly": true,
+            "items": {
+                "description": "Media URI for a file recorded in the call, e.g.: https://rest.ribbit.com/rest/1.0/media/r4m.ribbit.com/folder1/48598182.mp3",
+                "type": "string",
+                "maxLength": "255",
+                "format": "uri" 
+            } 
+        },
+        "peerToPeer": {
+            "description": "[GET/POST] Describes whether the parties in the call are joined via a peer to peer connection, or whether the audio path is mediated by the Ribbit Media Server. Note: This property can not be updated. This property value is undefined, if the call is not active",
+            "type": "boolean",
+            "optional": true,
+            "default": false 
+        },
+        "recording": {
+            "description": "[GET/PUT] When returned in a GET request indicates the call is being recorded. When modified in a PUT request either stops the current recording (when false) or repeats the latest recording (when true).",
+            "type": "boolean" 
+        },
+        "playing": {
+            "description": "[GET/PUT] When returned in a GET request indicates that media is playing on the call. When modified in a PUT request either stops the current media playing (when false) or repeats the latest media playing (when true).",
+            "type": "boolean" 
+        },
+        "requestingDTMF": {
+            "description": "[GET/PUT] When returned in a GET request indicates that DTMF digits have been requested for the call. When modified in a PUT request either stops the current DTMF request (when false) or repeats the latest DTMF request (when true).",
+            "type": "boolean" 
+        },
+        "appURI": {
+            "description": "[GET] Application that last managed this call, e.g. R4M. If the app allows 2 legged oauth, this field is untrusted.",
+            "type": "string",
+            "maxLength": "128",
+            "readonly": true,
+            "optional": true 
+        },
+        "receivedDTMF": {
+            "description": "[GET] The last set of DTMF digits received",
+            "type": "object",
+            "optional": true,
+            "readonly": true,
+            "properties": {
+                "time": {
+                    "description": "DTMF receive time.",
+                    "type": "string",
+                    "format": "date-time" 
+                },
+                "digits": {
+                    "description": "Received DTMF digits, e.g. 5#",
+                    "maxLength": "128",
+                    "type": "string" 
+                } 
+            } 
+        },
+        "record": {
+            "description": "[GET/PUT] Record the call to a file. If mode:talk/mute then all parties sharing the call bridge will be recorded; if mode:hold then only this call will be recorded.",
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "flushTones": {
+                    "description": "Indicates whether or not buffered DMTF tones should be discarded before recording.",
+                    "type": "boolean",
+                    "default": false 
+                },
+                "stopTones": {
+                    "description": "Digits party can use to stop recording.",
+                    "type": "string",
+                    "maxLength": "12",
+                    "optional": true 
+                },
+                "file": {
+                    "description": "The file which the call will be recorded to, e.g.: /media/r4m.ribbit.com/folder1/48598182.mp3",
+                    "type": "string",
+                    "maxLength": "472" 
+                },
+                "append": {
+                    "description": "Indicates whether or not the recording shall be appended to the indicated file.",
+                    "type": "boolean",
+                    "default": false 
+                },
+                "duration": {
+                    "description": "Records at most this number of milli-seconds. Use -1 for no time limit. Max allowed value is 1 year duration in milliseconds",
+                    "type": "number",
+                    "default": -1,
+                    "maximum": 31536000000 
+                } 
+            } 
+        },
+        "requestDTMF": {
+            "description": "[GET/PUT] Collects DTMF tones in the call.",
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "flushTones": {
+                    "description": "Indicates whether or not buffered DMTF tones should be discarded before collecting.",
+                    "type": "boolean",
+                    "default": false 
+                },
+                "stopTones": {
+                    "description": "Digits party can use to stop collecting DTMF.",
+                    "type": "string",
+                    "maxLength": "12",
+                    "optional": true 
+                },
+                "maxDigits": {
+                    "description": "Maximum numbers of digits to collect.",
+                    "type": "number",
+                    "maximum": 100 
+                },
+                "timeOut": {
+                    "description": "Wait at most this many milli-seconds for the first DTMF digit from party. Max allowed value is 1 hr in milliseconds",
+                    "type": "number",
+                    "maximum": 3600000 
+                },
+                "maxInterval": {
+                    "description": "Wait at most this many milli-seconds between each DTMF digit from party. . Max allowed value is 1 hr in milliseconds",
+                    "type": "number",
+                    "maximum": 3600000 
+                } 
+            } 
+        },
+        "voiceFont": {
+            "description": "[POST/PUT] Voice font for playing media. This property must be set by the client in order to play media types other than file, otherwise play requests will be rejected. The field can be set in advance and will be used while the call is active, or it can be set at the same time that play is requested.",
+            "type": "string",
+            "optional": true,
+            "enum": [
+                "us_en_female",
+                "uk_en_female" 
+            ] 
+        },
+        "play": {
+            "description": "[GET/PUT] If mode:talk/mute then play will play to all bridged calls, if mode:hold then only play to this call. Allowed methods: POST; PUT.",
+            "type": "object",
+            "optional": true,
+            "properties": {
+                "flushTones": {
+                    "description": "Indicates whether or not buffered DMTF tones should be discarded before playing media.",
+                    "type": "boolean",
+                    "default": false 
+                },
+                "stopTones": {
+                    "description": "Digits party can use to stop playing media.",
+                    "type": "string",
+                    "maxLength": "12",
+                    "optional": true 
+                },
+                "media": {
+                    "description": "Media items to be played in the call.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "description": "The media type.",
+                                "type": "string",
+                                "enum": [
+                                    "file",
+                                    "digits",
+                                    "money",
+                                    "year",
+                                    "month",
+                                    "weekday",
+                                    "string",
+                                    "duration",
+                                    "time",
+                                    "number",
+                                    "rank" 
+                                ] 
+                            },
+                            "value": {
+                                "description": "When media.type is file, indicates the media resource to be played, e.g. /media/r4m.ribbit.com/folder1/48598182.mp3. Otherwise, indicates the value to be played according to the media.type, e.g. media.type = number; value = 10.",
+                                "maxLength": "472",
+                                "type": "string" 
+                            },
+                            "length": {
+                                "description": "Plays the file at most for this number of milli-seconds. Not needed when media.type is not file. Use -1 to play the entire file. Max allowed value is 1 year duration in millseconds.",
+                                "type": "number",
+                                "default": -1,
+                                "optional": true,
+                                "maximum": 31536000000 
+                            },
+                            "offset": {
+                                "description": "Starts playing from this file offset (in milli-seconds). Not needed when media.type is not file. Max allowed value is 1 year duration in millseconds.",
+                                "type": "number",
+                                "default": 0,
+                                "optional": true,
+                                "maximum": 31536000000 
+                            } 
+                        } 
+                    } 
+                } 
+            } 
+        },
+        "divertReason": {
+            "type": "string",
+            "description": "[GET] diversion reason associated to this resource",
+            "enum": [
+                "unconditional",
+                "user_busy",
+                "no_answer",
+                "unavailable",
+                "invalid" 
+            ],
+            "readonly": true,
+            "optional": true 
+        } 
+    },
+    "links": [
+        {
+            "rel": "full",
+            "href": "/calls/{uid}/{id}",
+            "description": "Details of a specific call" 
+        },
+        {
+            "rel": "instances",
+            "href": "/calls/{uid}",
+            "description": "List all calls for a user and optionally use the supported filters below",
+            "properties": {
+                "active": {
+                    "$ref": "#.properties.active" 
+                },
+                "bridgeId": {
+                    "$ref": "#.properties.bridgeId" 
+                },
+                "appURI": {
+                    "$ref": "#.properties.appURI" 
+                },
+                "sourceURI": {
+                    "$ref": "#.properties.sourceURI" 
+                },
+                "targetURI": {
+                    "$ref": "#.properties.targetURI" 
+                },
+                "divertURI": {
+                    "$ref": "#.properties.divertURI" 
+                },
+                "oldest": {
+                    "description": "Time-stamp for the oldest call to be returned (Zulu time).",
+                    "type": "string",
+                    "format": "date-time",
+                    "optional": true 
+                },
+                "newest": {
+                    "description": "Time-stamp for the newest call to be returned (Zulu time).",
+                    "type": "string",
+                    "format": "date-time",
+                    "optional": true 
+                } 
+            } 
+        },
+        {
+            "rel": "create",
+            "href": "/calls/{uid}",
+            "method": "post",
+            "description": "Create a new call",
+            "properties": {
+                "externalRefId": {
+                    "$ref": "#.properties.externalRefId" 
+                },
+                "bridgeId": {
+                    "$ref": "#.properties.bridgeId" 
+                },
+                "sourceURI": {
+                    "$ref": "#.properties.sourceURI" 
+                },
+                "targetURI": {
+                    "$ref": "#.properties.targetURI" 
+                },
+                "sourceName": {
+                    "$ref": "#.properties.sourceName" 
+                },
+                "targetName": {
+                    "$ref": "#.properties.targetName" 
+                },
+                "peerToPeer": {
+                    "$ref": "#.properties.peerToPeer" 
+                } 
+            } 
+        },
+        {
+            "rel": "modify",
+            "href": "/calls/{uid}/{id}",
+            "method": "put",
+            "description": "Update a call for the given user" 
+        },
+        {
+            "rel": "transferTo",
+            "href": "/calls/{uid}/{id}",
+            "method": "put",
+            "description": "Transfer a call to a different bridge",
+            "properties": {
+                "bridgeId": "{bridgeId}" 
+            } 
+        },
+        {
+            "rel": "assignTo",
+            "href": "/calls/{uid}",
+            "method": "post",
+            "description": "Move ownership of a call to a different user",
+            "properties": {
+                "id": "{id}" 
+            } 
+        },
+        {
+            "rel": "voicemail",
+            "href": "/messages/{uid}?callId={id}",
+            "targetSchema": "messageSchema.js" 
+        } 
+    ]
+}

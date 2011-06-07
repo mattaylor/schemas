@@ -1,0 +1,10 @@
+{	"name"	: "Netflix Genres Schema",
+	"id"		: "genres",
+	"extends: { "$ref":"./nfData.json"}
+
+   "properties": {
+      "name"	: { "type":"string", "description":"The name of this genre" },
+      "title"	: { "$ref":"titles", "type":"object"},
+      "score"	: { "type":"number", "description":"Degree of relevance" }
+	}
+}

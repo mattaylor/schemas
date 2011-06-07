@@ -1,0 +1,22 @@
+{	"name": "Netflix Base Data Schema",
+	"id"	: "nfData.json",
+   "additionalProperties": false,
+	"type"	: [ "object", "array" ],
+   "items"	: { "$ref": "#" },
+	"pathStart": "http://api.netflix.com/jsSchema/1.0",
+	"extends" : "http://json-schema.org/hyper-schema",
+	"readonly": true,
+
+   "properties":	{
+      "id"		: { "type":"string", "description":"The guid for this data item"},
+		"author"	: { "type":"string", "description":"The person who last modified this entry"},
+		"updated": { "type":"string", "format":"date", "description":"The date this entry was last updated"},
+		"schema"	: { "$ref":"#.id" }
+	},
+
+	"links"	: [
+		{ "rel":"self", "href":"/{schema}/{id}" },
+		{ "rel":"instances", "href":"/{schema}" },
+		{ "rel":"create", "href":"/{schema}", "method":"post" }
+	]
+}

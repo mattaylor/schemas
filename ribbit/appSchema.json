@@ -1,0 +1,179 @@
+{
+    "name": "Ribbit App Data",
+    "description": "This is the REST API schema for the apps resource, which represents an application in the platform",
+    "type" : [
+        "object",
+        "array" 
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "additonalProperties": false,
+    "properties": {
+        "id": {
+            "type": "string",
+            "readonly": false,
+            "pattern": "[A-Za-z0-9_-]+",
+            "maxLength": "128",
+            "description": "[GET/POST] Unique Instance Identifier" 
+        },
+        "name" : {
+            "type": "string",
+            "optional": true,
+            "maxLength": "256",
+            "description": "[GET/PUT/POST] The Name of This application" 
+        },
+        "description": {
+            "type": "string",
+            "optional": true,
+            "maxLength": "256",
+            "description": "[GET/PUT/POST] The description of the application" 
+        },
+        "createdBy" : {
+            "type": "string",
+            "readonly": true,
+            "maxLength": "256",
+            "description": "[GET] The userid of the developer who created this application" 
+        },
+        "createdWith": {
+            "type": "string",
+            "readonly": true,
+            "maxLength": "256",
+            "description": "[GET] The application id used to publish this application" 
+        },
+        "domain" : {
+            "type": "string",
+            "readonly": true,
+            "maxLength": "128",
+            "description": "[GET/POST] The domain within which this application may operate. All users in this domain will be able to use this application" 
+        },
+        "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readonly": true,
+            "description": "[GET] The date this resource was created. The date format is: yyyy-MM-ddTHH:mm:ssZ" 
+        },
+        "allow2LeggedAuth": {
+            "type": "boolean",
+            "optional": true,
+            "default": false,
+            "description": "[GET/PUT/POST] The application can use two-legged (desktop) authentication" 
+        },
+        "role": {
+            "enum": [
+                "INTERNAL",
+                "DEFAULT",
+                "GUEST",
+                "OPERATIONS" 
+            ],
+            "optional": true,
+            "default": "DEFAULT",
+            "type": "string",
+            "readonly": false,
+            "description": "[GET/PUT/POST] The role as used by the secure perimeter to determine access rights. Only 'INTERNAL' apps may change the role of other apps. Note that 'GUEST' apps should be used for any application written by a developer for a domain which they do not also manage. These apps are restricted from creating or editing users and applications." 
+        } 
+    },
+    "links": [
+        {
+            "rel": "full",
+            "href": "/apps/{id}",
+            "description": "get full details of the application by id" 
+        },
+        {
+            "rel": "instances",
+            "href": "/apps",
+            "description": "get all the applications and optionally use the supported filters below",
+            "properties" : {
+                "id" : {
+                    "$ref": "#.properties.id" 
+                },
+                "domain": {
+                    "$ref" : "#.properties.domain" 
+                },
+                "createdBy": {
+                    "$ref": "#.properties.createdBy" 
+                },
+                "name": {
+                    "$ref": "#.properties.name" 
+                },
+                "role" : {
+                    "$ref": "#.properties.role" 
+                } 
+            } 
+        },
+        {
+            "rel": "create",
+            "href": "/apps",
+            "method": "post",
+            "description": "create new application",
+            "properties" : {
+                "id" : {
+                    "$ref": "#.properties.id" 
+                },
+                "name": {
+                    "$ref": "#.properties.name" 
+                },
+                "description": {
+                    "$ref": "#.properties.description" 
+                },
+                "domain": {
+                    "$ref" : "#.properties.domain" 
+                },
+                "allow2LeggedAuth" : {
+                    "$ref": "#.properties.allow2LeggedAuth" 
+                },
+                "role" : {
+                    "$ref": "#.properties.role" 
+                } 
+            } 
+        },
+        {
+            "rel": "modify",
+            "href": "/apps/{id}",
+            "method": "put",
+            "description": "modify details of the application by id. Only 'INTERNAL' apps can edit roles",
+            "properties" : {
+                "name": {
+                    "$ref": "#.properties.name" 
+                },
+                "description": {
+                    "$ref": "#.properties.description" 
+                },
+                "allow2LeggedAuth" : {
+                    "$ref": "#.properties.allow2LeggedAuth" 
+                },
+                "role" : {
+                    "$ref": "#.properties.role" 
+                } 
+            } 
+        },
+        {
+            "rel": "delete",
+            "href": "/apps/{id}",
+            "method": "delete",
+            "description": "delete application by id" 
+        },
+        {
+            "rel": "secret",
+            "href": "/apps/{id}/secret",
+            "description": "Get the consumer key and secret for this application. Only 'INTERNAL' apps can access any application's  consumerKey and secret",
+            "targetSchema": {
+                "properties": {
+                    "consumerKey": {
+                        "readonly": true,
+                        "type": "string",
+                        "maxLength": "80",
+                        "description": "[GET] The client-id to use in oauth-requests" 
+                    },
+                    "secret": {
+                        "readonly": true,
+                        "type": "string",
+                        "maxLength": "256",
+                        "description": "[GET] The client secret to use in oauth-requests" 
+                    } 
+                } 
+            } 
+        } 
+    ]
+}

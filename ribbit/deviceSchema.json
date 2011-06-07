@@ -1,0 +1,168 @@
+{
+    "name": "Device Schema",
+    "description": "Devices (communication endpoints) registered to a user",
+    "additonalProperties": false,
+    "type": [
+        "array",
+        "object" 
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "[GET/POST] Device URI (supported types are tel, sip, mailto, msn, xmpp, flash, skype, gtalk)",
+            "maxLength": "80",
+            "format": "uri" 
+        },
+        "label": {
+            "type": "string",
+            "description": "[GET/PUT/POST] Miscellaneous data about this device",
+            "maxLength": "20",
+            "optional": true 
+        },
+        "password": {
+            "type": "string",
+            "description": "[PUT/POST] Password used when provisioning this device (currently only required by SIP)",
+            "maxLength": "80",
+            "optional": true 
+        },
+        "verifiedDate": {
+            "type": "string",
+            "description": "[GET/PUT] Date and time the device was last verified. This is settable only by an app whose appId is trusted by Ribbit. Example format: 2010-11-05T12:53:01Z",
+            "maxLength": "20",
+            "format": "date-time" 
+        },
+        "uid": {
+            "type": "string",
+            "description": "[GET] GUID of user owning this device",
+            "readonly": true,
+            "maxLength": "80",
+            "optional" : true 
+        } 
+    },
+    "links": [
+        {
+            "rel": "instances",
+            "href": "/devices/{uid}",
+            "description": "List all devices for a user and optionally use the supported filters below",
+            "properties": {
+                "verified": {
+                    "description": "Only devices with verifiedDate set to be returned.",
+                    "type": "boolean",
+                    "optional": true 
+                },
+                "uritype": {
+                    "description": "Only devices with specified uri type (tel, sip, mailto, msn, xmpp, flash, skype, gtalk) to be returned.",
+                    "maxLength": "80",
+                    "type": "string",
+                    "optional": true 
+                } 
+            } 
+        },
+        {
+            "rel": "setIndicators",
+            "href": "/services/ribbit/deviceindicators/{uid}/{id}",
+            "description": "Set indicators for a device" ,
+            "method": "post",
+            "properties" : {
+                "messagesWaiting": {
+                    "type": "array",
+                    "description": "Messages waiting indicators for a device.",
+                    "items": {
+                        "type": "object",
+                        "description": "Messages waiting by type.",
+                        "properties" : {
+                            "type" : {
+                                "description": "The source of the messages waiting.",
+                                "type": "string",
+                                "enum": [
+                                    "voice" 
+                                ] 
+                            },
+                            "newMessages" : {
+                                "description": "The number of new messages",
+                                "type": "number",
+                                "default": 0,
+                                "minimum": 0,
+                                "maximum": 65535,
+                                "optional": true 
+                            },
+                            "oldMessages" : {
+                                "description": "The number of old messages",
+                                "type": "number",
+                                "default": 0,
+                                "minimum": 0,
+                                "maximum": 65535,
+                                "optional": true 
+                            },
+                            "urgent" : {
+                                "description": "Whether this indicates urgent messages",
+                                "type": "boolean",
+                                "default": false,
+                                "optional": true 
+                            } 
+                        } 
+                    } 
+                } 
+            } 
+        },
+        {
+            "rel": "full",
+            "href": "/devices/{uid}/{id}",
+            "description": "Details of a specific device" 
+        },
+        {
+            "rel": "create",
+            "href": "/devices/{uid}",
+            "method": "post",
+            "description": "Create a new device",
+            "properties": {
+                "id": {
+                    "$ref": "#.properties.id" 
+                },
+                "label": {
+                    "$ref": "#.properties.label" 
+                },
+                "password": {
+                    "$ref": "#.properties.password" 
+                } 
+            } 
+        },
+        {
+            "rel": "modify",
+            "href": "/devices/{uid}/{id}",
+            "method": "put",
+            "description": "update a device for the given user",
+            "properties": {
+                "label": {
+                    "$ref": "#.properties.label" 
+                },
+                "password": {
+                    "$ref": "#.properties.password" 
+                },
+                "verifiedDate": {
+                    "$ref": "#.properties.password" 
+                } 
+            } 
+        },
+        {
+            "rel": "delete",
+            "href": "/devices/{uid}/{id}",
+            "method": "delete",
+            "description": "delete a device for the given user" 
+        },
+        {
+            "rel": "verified",
+            "href": "/devices/{uid}?verified=true",
+            "description": "Verified devices, i.e. devices with a verifiedDate" 
+        },
+        {
+            "rel": "devicesByUriType",
+            "href": "/devices/{uid}?uritype={type}",
+            "description": "List all devices of a particular uri type" 
+        } 
+    ]
+}

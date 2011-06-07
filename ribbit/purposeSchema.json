@@ -1,0 +1,119 @@
+{
+    "name": "Purpose Number Lookup",
+    "description": "Lookup Available Ribbit Purpose Numbers",
+    "additionalProperties": false,
+    "type": [
+        "array",
+        "object"
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "properties": {
+        "devId": {
+            "type": "string",
+            "format": "tel" ,
+            "readonly": true,
+            "description": "[GET] Unique Device Identifier" 
+        },
+        "provider" : {
+            "type": "string",
+            "description": "[GET] The carrier providing these numbers",
+            "optional": true,
+            "readonly": true 
+        },
+        "smsEnabled": {
+            "type": "boolean",
+            "default": false,
+            "readonly": true,
+            "description": "[GET] Is this number enabled to recieve SMS" 
+        },
+        "freePhone": {
+            "type": "boolean",
+            "default": false,
+            "readonly": true,
+            "description": "[GET] Is this number a toll-free number" 
+        },
+        "country" : {
+            "type": "string",
+            "optional": true,
+            "readonly": true,
+            "description": "[GET] Three letter country code (ISO 3166-1 alpha-3) that the number is associated with" 
+        },
+        "labels": {
+            "type": "array",
+            "items": {
+                "type": "string" 
+            },
+            "optional": true,
+            "readonly": true,
+            "description": "[GET] Any descriptive features of this number" 
+        },
+        "reservedUntil" : {
+            "type": "string",
+            "format": "date-time",
+            "description": "[GET] Expriy time of the reservation on this number",
+            "optional": true,
+            "readonly": true 
+        },
+        "status": {
+            "enum": [
+                "reserved",
+                "allocated",
+                "available"
+            ],
+            "description": "[GET/PUT] Current status of this number" 
+        },
+        "uid" : {
+            "readonly": true,
+            "description": "[GET] User associated with this number" 
+        } 
+    },
+    "links" : [
+        {
+            "rel": "instances",
+            "description": "search Ribbit purpose numbers, - should return only unreserved numbers or numbers reservice by {uid} ",
+            "href": "/services/ribbit/numbers/{uid}",
+            "properties": {
+                "devId" : {
+                    "type": "string",
+                    "format": "regexp",
+                    "optional": true 
+                },
+                "smsEnabled" : {
+                    "type": "boolean",
+                    "optional": true 
+                },
+                "freephone" : {
+                    "type": "boolean",
+                    "optional": true 
+                },
+                "country" : {
+                    "type": "string",
+                    "optional": true 
+                },
+                "labels" : {
+                    "type": "string",
+                    "optional": true 
+                },
+                "status" : {
+                    "enum": [
+                        "reserved",
+                        "allocated"
+                    ],
+                    "optional": true 
+                },
+                "provider" : {
+                    "type": "string",
+                    "optional": true 
+                } 
+            } 
+        },
+        {
+            "rel": "create",
+            "href": "/services/ribbit/numbers",
+            "description": "Add Numbers to the Number pools (ops only)" 
+        } 
+    ]
+}

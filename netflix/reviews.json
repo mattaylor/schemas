@@ -1,0 +1,25 @@
+{	"name"	: "Netflix Reviews",
+	"id"		: "ratings",
+	"extends: { "$ref":"./nfData.json"}
+
+   "properties": {
+      "user"	: { "$ref":"user", "type":"object"},
+	   "title"	: { "$ref":"title", "type":"object"},
+		"rating"	: { "type":"number"},
+		"notHelpfull": { "type":"number"},
+		"helpfull":{ "type":"number"},
+		"writeUp": { "type":"string"}
+	},
+
+	"links": [
+		{	"rel":"create", "href":"/review", "method":"post",
+			"properties": {
+				"titleId": { "type":"string" },
+				"writeUp": { "$ref":"#.properties.writeUp"}
+			}
+		},
+		{	"rel":"feedback", "href":"/review/{id}", "method":"post",
+			"properties": { "helpfull": { "type":"boolean"} }
+		}
+	]
+}

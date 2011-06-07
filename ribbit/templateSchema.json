@@ -1,0 +1,35 @@
+{
+    "name": "Templater",
+    "description": "Simple Templating Service to instatiate Txt Files with parameters.",
+    "additonalProperties": true,
+    "type": [
+        "array",
+        "object"
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "properties": {
+        "templateURI": {
+            "type": "string",
+            "description": "[POST] A media URI to the template resource",
+            "format": "uri" 
+        } 
+    },
+    "links" : [
+        {
+            "rel": "create",
+            "href": "/services/ribbit/templates",
+            "description": "Return a LOCATION reference to the instatiated file",
+            "method": "post",
+            "additonalProperties": true,
+            "properties": {
+                "templateURI": {
+                    "type": "string",
+                    "format": "uri" 
+                } 
+            } 
+        } 
+    ]
+}

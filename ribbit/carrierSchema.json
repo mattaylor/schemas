@@ -1,0 +1,149 @@
+{
+    "name": "Carrier Lookup",
+    "description": "Lookup details of a number to find the carrier ",
+    "additonalProperties": false,
+    "type": [
+        "array",
+        "object" 
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "Unique Carrier Identifier" 
+        },
+        "description": {
+            "type": "string",
+            "description": "The description about this carrier" 
+        },
+        "msisdn": {
+            "type": "string",
+            "description": "Normalized Number that was looked Up",
+            "optional": true 
+        },
+        "locale": {
+            "type": "string",
+            "format": "locale",
+            "description": "The country where this carrier operates" 
+        },
+        "ccfPrefix": {
+            "type": "string",
+            "default": "*004*",
+            "description": "The prefix key presses to enable ccf" 
+        },
+        "ccfSuffix": {
+            "type": "string",
+            "default": "#",
+            "description": "The suffix key presses to enable ccf" 
+        },
+        "ccfCancel": {
+            "type": "string",
+            "default": "##004#",
+            "description": "The key presses to cancel ccf" 
+        },
+        "divertAvailable": {
+            "type": "boolean",
+            "description": "Does this carrier supply a diversion header on SIP invites" 
+        },
+        "smsEmailDomain": {
+            "type": "string",
+            "description": "Indicates the domain to be appended to MSISDN's when sending SMS's through email, e.g. sms.verizon.com.",
+            "optional": true 
+        } 
+    },
+    "links": [
+        {
+            "rel": "instances",
+            "description": "list all carriers",
+            "href": "/services/ribbit/carriers" 
+        },
+        {
+            "rel": "self",
+            "href": "/services/ribbit/carriers/{id}" 
+        },
+        {
+            "rel": "create",
+            "description": "create a new Carrier Entry - Ops only",
+            "href": "/services/ribbit/carriers",
+            "method": "post",
+            "properties": {
+                "description": {
+                    "$ref": "#.properties.description" 
+                },
+                "locale": {
+                    "$ref": "#.properties.locale" 
+                },
+                "ccfPrefix": {
+                    "$ref": "#.properties.ccfPrefix" 
+                },
+                "ccfSuffix": {
+                    "$ref": "#.properties.ccfSuffix" 
+                },
+                "ccfCancel": {
+                    "$ref": "#.properties.ccfCancel" 
+                },
+                "divertAvailable": {
+                    "$ref": "#.properties.divertAvailable" 
+                },
+                "smsEmailDomain": {
+                    "$ref": "#.properties.smsEmailDomain" 
+                } 
+            } 
+        },
+        {
+            "rel": "delete carrier",
+            "description": "delete an existing Carrier Entry - Ops only",
+            "href": "/services/ribbit/carriers/{id}",
+            "method": "delete" 
+        },
+        {
+            "rel": "update carrier",
+            "description": "update an existing Carrier Entry - Ops only",
+            "href": "/services/ribbit/carriers/{id}",
+            "method": "put",
+            "properties": {
+                "description": {
+                    "$ref": "#.properties.description" 
+                },
+                "locale": {
+                    "$ref": "#.properties.locale" 
+                },
+                "ccfPrefix": {
+                    "$ref": "#.properties.ccfPrefix" 
+                },
+                "ccfSuffix": {
+                    "$ref": "#.properties.ccfSuffix" 
+                },
+                "ccfCancel": {
+                    "$ref": "#.properties.ccfCancel" 
+                },
+                "divertAvailable": {
+                    "$ref": "#.properties.divertAvailable" 
+                },
+                "smsEmailDomain": {
+                    "$ref": "#.properties.smsEmailDomain" 
+                } 
+            } 
+        },
+        {
+            "rel": "msisdn and locale lookup",
+            "description": "lookup carrier by MSISDN or locale",
+            "href": "/services/ribbit/carriers",
+            "properties": {
+                "msisdn": {
+                    "description": "Retrieves the carrier by this MSISDN; either MSISDN or locale should be provided, not both.",
+                    "type": "string",
+                    "optional": true 
+                },
+                "locale": {
+                    "description": "Retrieves the carrier by this locale; either MSISDN or locale should be provided, not both.",
+                    "type": "string",
+                    "optional": true 
+                } 
+            } 
+        } 
+    ]
+}

@@ -1,0 +1,19 @@
+{	"name"	: "Netflix Queue",
+	"id"		: "queues",
+	"extends: { "$ref":"./nfUser.json"}
+
+   "properties": {
+		"position":{ "type":"number", "readonly":false},
+		"type"	: { "type":"string", "enum": [ "instant", "dvd"], "readonly":false },
+		"added"	: { "type":"string", "format":"date" }
+	},
+
+	"links": [
+		{	"rel":"create", "href":"/queues/{user.id}", "properties": {
+				"titleId": { "type":"string" },
+				"position":{ "type":"number" },
+				"type"	: { "type":"string", "enum":["instant", "dvd"] }
+			}
+		}
+	]
+}

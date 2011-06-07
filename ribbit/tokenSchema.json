@@ -1,0 +1,115 @@
+{
+    "name": "Token Schema",
+    "description": "Tokens represent permissions or capabilities to act on a user's resources. They can be created either with a POST to this resource, or through 2 or 3-legged oauth login",
+    "additionalProperties": false,
+    "type": [
+        "array",
+        "object" 
+    ],
+    "items" : {
+        "type": "object",
+        "$ref": "#" 
+    },
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "[GET] The token string",
+            "maxLength": "80",
+            "readonly": true 
+        },
+        "secret": {
+            "type": "string",
+            "description": "[GET] The token secret",
+            "maxLength": "256",
+            "readonly": true 
+        },
+        "createTime" : {
+            "type": "string",
+            "description": "[GET] Time token was created. format - yyyy-MM-ddTHH:mm:ssZ",
+            "format": "date-time",
+            "readonly": true 
+        },
+        "expiresTime" : {
+            "type": "string",
+            "description": "[GET/PUT/POST] Time token is set to expire: format - yyyy-MM-ddTHH:mm:ssZ",
+            "format": "date-time",
+            "maxLength": "20",
+            "optional": true 
+        },
+        "usageInterval" : {
+            "type": "number",
+            "description": "[GET/PUT/POST] Time interval (in secs) after which usesRemaining resets to maxUses. The time interval can be between 0 seconds to 1 year",
+            "minimum": 0,
+            "maximum": 31536000,
+            "optional": true 
+        },
+        "maxUses" : {
+            "type": "number",
+            "description": "[GET/PUT/POST] Maximum number of times token can be used before it expires",
+            "minimum": 0,
+            "maximum": 1000000,
+            "optional": true 
+        },
+        "usesRemaining" : {
+            "type": "number",
+            "readonly": true,
+            "description": "[GET] Remaining number of times token can be used" 
+        },
+        "uid" : {
+            "type": "string",
+            "description": "[GET] GUID of user owning this token",
+            "readonly": true,
+            "maxLength": "80",
+            "optional" : true 
+        } 
+    },
+    "links": [
+        {
+            "rel": "full",
+            "description": "Details of a specific token",
+            "href": "/tokens/{uid}/{id}" 
+        },
+        {
+            "rel": "instances",
+            "description": "List all tokens for a user",
+            "href": "/tokens/{uid}" 
+        },
+        {
+            "rel": "create",
+            "description": "Create a new token",
+            "href": "/tokens/{uid}",
+            "method": "post",
+            "properties" : {
+                "expiresTime" : {
+                    "$ref": "#.properties.expiresTime" 
+                },
+                "usageInterval": {
+                    "$ref": "#.properties.usageInterval" 
+                },
+                "maxUses": {
+                    "$ref": "#.properties.maxUses" 
+                } 
+            } 
+        },
+        {
+            "rel": "modify",
+            "href": "/tokens/{uid}/{id}",
+            "method": "put",
+            "description": "Update token properties" 
+        },
+        {
+            "rel": "delete",
+            "href": "/tokens/{uid}/{id}",
+            "method": "delete",
+            "description": "Delete token" 
+        } ,
+        {
+            "rel": "policies",
+            "href": "/policies/{uid}/{id}",
+            "description": "List all policies for a token" ,
+            "targetSchema" : {
+                "$ref": "./policySchema.json" 
+            } 
+        } 
+    ]
+}
