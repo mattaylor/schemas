@@ -8,25 +8,25 @@
 			'items': {
 				'type':'object', 
 				'properties': {
-					'DbgColor' 		: { 'type:'number'},
-					'DbgIndex' 		: { 'type:'number'},
-					'DbgName' 		: { 'type:'string'},
-					'colorAmbient' 	: { 'type:'array', 'length:3, 'items':{ type:'number'}},
-					'colorDiffuse' 	: { 'type:'array', 'length:3, 'items':{ type:'number'}},
-					'colorSpecular' : { 'type:'array', 'length:3, 'items':{ type:'number'}},
+					'DbgColor' 		: { 'type':'number'},
+					'DbgIndex' 		: { 'type':'number'},
+					'DbgName' 		: { 'type':'string'},
+					'colorAmbient' 	: { 'type':'array', 'length:3, 'items':{ 'type:'number'}},
+					'colorDiffuse' 	: { 'type':'array', 'length:3, 'items':{ 'type:'number'}},
+					'colorSpecular' : { 'type':'array', 'length:3, 'items':{ 'type:'number'}},
 					'illumination' 	: { 'type':'number'},
 					'opticalDensity': { 'type':'number'},
 				}
 			}
 		},
-		'vertices'	: 	{ 'type':'array', 'items':{ type:'number'}},
+		'vertices'	: 	{ 'type':'array', 'items':{ 'type':'number'}},
 		'morphTargets': {
 			'type':	'array', 
 			'items': {
 				'type':	'object', 
 				'properties': {
 					'name'	  : { 'type':'string' },
-					'vertices': { 'type':'array', 'items':{ type:'number'}}
+					'vertices': { 'type':'array', 'items':{ 'type':'number'}}
 				}
 			}
 		},
@@ -36,7 +36,7 @@
 				'type:'object', '
 				'properties': {
 					'name'	: { 'type':'string'},
-					'colors': { 'type':'array', 'items':{ type:'number'}}
+					'colors': { 'type':'array', 'items':{ 'type':'number'}}
 				}
 			}
 		},
