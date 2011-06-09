@@ -11,9 +11,9 @@
 					'DbgColor' 		: { 'type':'number'},
 					'DbgIndex' 		: { 'type':'number'},
 					'DbgName' 		: { 'type':'string'},
-					'colorAmbient' 	: { 'type':'array', 'length':3, 'items':{ 'type:'number'}},
-					'colorDiffuse' 	: { 'type':'array', 'length':3, 'items':{ 'type:'number'}},
-					'colorSpecular' : { 'type':'array', 'length':3, 'items':{ 'type:'number'}},
+					'colorAmbient' 	: { 'type':'array', 'length':3, 'items':{ 'type':'number'}},
+					'colorDiffuse' 	: { 'type':'array', 'length':3, 'items':{ 'type':'number'}},
+					'colorSpecular' : { 'type':'array', 'length':3, 'items':{ 'type':'number'}},
 					'illumination' 	: { 'type':'number'},
 					'opticalDensity': { 'type':'number'},
 				}
